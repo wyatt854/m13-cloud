@@ -11,19 +11,17 @@
         .file-item::before { content: "> "; margin-right: 10px; }
         a { color: #fff; text-decoration: none; font-size: 18px; transition: all 0.3s; }
         a:hover { color: #00ff41; text-shadow: 0 0 10px #00ff41; padding-left: 10px; }
-        .loading { font-style: italic; opacity: 0.6; }
-        .error { color: #ff4444; }
+        .status-msg { font-style: italic; color: #00ff41; margin-bottom: 20px; }
     </style>
 </head>
 <body>
 
     <div class="glitch">SYSTEM_M13_MEMORY_STORAGE [ONLINE]</div>
     
-    <div id="status">Chargement des archives...</div>
+    <div id="status" class="status-msg">Initialisation de la connexion aux archives...</div>
     <ul id="file-list"></ul>
 
     <script>
-        // Configuration de ton projet
         const username = 'wyatt854';
         const repo = 'm13-cloud';
         const apiUrl = `https://api.github.com/repos/${username}/${repo}/contents/`;
@@ -34,21 +32,22 @@
 
             try {
                 const response = await fetch(apiUrl);
+                if (!response.ok) throw new Error('Erreur API');
                 const files = await response.json();
 
-                statusElement.innerText = "> ACCÈS AUX ARCHIVES PDF :";
-                listElement.innerHTML = ""; // On vide la liste
+                statusElement.innerText = "> ACCÈS AUX ARCHIVES MÉMOIRE (PDF) :";
+                listElement.innerHTML = ""; 
 
                 files.forEach(file => {
-                    // On ne liste que les fichiers PDF et on ignore les fichiers système comme index.html ou CNAME
-                    if (file.name.endsWith('.pdf')) {
+                    if (file.name.toLowerCase().endsWith('.pdf')) {
                         const li = document.createElement('li');
                         li.className = 'file-item';
                         
                         const a = document.createElement('a');
-                        a.href = file.name;
+                        // encodeURIComponent protège le lien si tu as quand même des espaces
+                        a.href = encodeURIComponent(file.name);
                         a.target = "_blank";
-                        a.innerText = file.name.toUpperCase();
+                        a.innerText = file.name.replace(/_/g, ' ').toUpperCase();
                         
                         li.appendChild(a);
                         listElement.appendChild(li);
@@ -56,12 +55,11 @@
                 });
 
                 if (listElement.children.length === 0) {
-                    statusElement.innerText = "> AUCUNE ARCHIVE PDF TROUVÉE.";
+                    statusElement.innerText = "> AUCUNE ARCHIVE DÉTECTÉE DANS LE SYSTÈME.";
                 }
 
             } catch (error) {
-                statusElement.innerText = "> ERREUR DE CONNEXION AU SERVEUR.";
-                statusElement.className = "error";
+                statusElement.innerText = "> ERREUR : CONNEXION AU REPOSITORY IMPOSSIBLE.";
                 console.error(error);
             }
         }
