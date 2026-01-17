@@ -4,19 +4,20 @@
     <meta charset="UTF-8">
     <title>PROJECT M13 - SECURE ACCESS</title>
     <style>
-        body { background: #000; color: #00ff41; font-family: 'Courier New', monospace; padding: 40px; line-height: 1.6; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 80vh; }
+        body { background: #000; color: #00ff41; font-family: 'Courier New', monospace; padding: 40px; line-height: 1.6; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 80vh; margin: 0; }
         .glitch { font-size: 24px; border-bottom: 2px solid #00ff41; padding-bottom: 15px; margin-bottom: 30px; letter-spacing: 2px; text-transform: uppercase; text-shadow: 2px 0px #ff0000; }
-        #login-box { border: 1px solid #00ff41; padding: 30px; background: rgba(0, 255, 65, 0.05); text-align: center; }
-        input { background: #000; border: 1px solid #00ff41; color: #00ff41; padding: 10px; font-family: 'Courier New', monospace; outline: none; margin-bottom: 10px; width: 200px; text-align: center; }
-        button { background: #00ff41; color: #000; border: none; padding: 10px 20px; cursor: pointer; font-weight: bold; font-family: 'Courier New', monospace; }
-        button:hover { background: #fff; }
-        #cloud-content { display: none; width: 100%; max-width: 800px; }
+        #login-box { border: 1px solid #00ff41; padding: 30px; background: rgba(0, 255, 65, 0.05); text-align: center; box-shadow: 0 0 15px rgba(0, 255, 65, 0.2); }
+        input { background: #000; border: 1px solid #00ff41; color: #00ff41; padding: 10px; font-family: 'Courier New', monospace; outline: none; margin-bottom: 10px; width: 200px; text-align: center; font-size: 16px; }
+        button { background: #00ff41; color: #000; border: none; padding: 10px 20px; cursor: pointer; font-weight: bold; font-family: 'Courier New', monospace; text-transform: uppercase; }
+        button:hover { background: #fff; box-shadow: 0 0 10px #fff; }
+        #cloud-content { display: none; width: 100%; max-width: 800px; animation: fadeIn 1s; }
         #file-list { list-style: none; padding: 0; }
-        .file-item { margin: 15px 0; display: flex; align-items: center; padding: 8px; border-left: 3px solid transparent; }
-        .file-item:hover { border-left: 3px solid #00ff41; background: rgba(0, 255, 65, 0.05); }
+        .file-item { margin: 15px 0; display: flex; align-items: center; padding: 10px; border: 1px solid rgba(0, 255, 65, 0.1); background: rgba(0, 255, 65, 0.02); }
+        .file-item:hover { border: 1px solid #00ff41; background: rgba(0, 255, 65, 0.1); }
         a { color: #fff; text-decoration: none; font-size: 18px; display: block; width: 100%; }
         a:hover { color: #00ff41; }
-        .error { color: #ff0000; margin-top: 10px; font-size: 12px; }
+        .error { color: #ff0000; margin-top: 15px; font-size: 13px; font-weight: bold; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
@@ -24,47 +25,38 @@
     <div class="glitch">PROJECT M13 // SECURE_STORAGE</div>
 
     <div id="login-box">
-        <p>> CLÉ D'ACCÈS :</p>
-        <input type="password" id="pass-input" placeholder="CODE">
+        <p>> ENTRER CLÉ D'ACCÈS SYSTÈME :</p>
+        <input type="password" id="pass-input" placeholder="CODE" onkeypress="handleKeyPress(event)">
         <br>
-        <button onclick="verifyAccess()">AUTH_LOGIN</button>
+        <button onclick="verifyAccess()">DÉCRYPTER</button>
         <div id="error-msg" class="error"></div>
     </div>
 
     <div id="cloud-content">
-        <div id="status" style="font-style: italic; margin-bottom: 20px;">> ACCÈS AUX TRACES DU PASSÉ :</div>
+        <div id="status" style="font-style: italic; margin-bottom: 20px; color: #00ff41;">> CONNEXION ÉTABLIE. ARCHIVES DISPONIBLES :</div>
         <ul id="file-list"></ul>
     </div>
 
     <script>
-        // Mot de passe "M13S" crypté selon ta méthode
-        const encryptedKey = "Ihc3Lh42LjwS"; 
-        const xorKey = "NOVA7-SX13";
-
-        function decryptProcess(input) {
-            try {
-                let decoded = atob(input);
-                let xored = "";
-                for (let i = 0; i < decoded.length; i++) {
-                    xored += String.fromCharCode(decoded.charCodeAt(i) ^ xorKey.charCodeAt(i % xorKey.length));
-                }
-                let unicodeDecoded = atob(xored);
-                let reversed = unicodeDecoded.split("").reverse().join("");
-                return JSON.parse(reversed).pass;
-            } catch(e) { return null; }
-        }
-
+        // Version ultra-fiable de la vérification
+        // Le mot de passe est toujours "M13S"
         function verifyAccess() {
             const input = document.getElementById('pass-input').value;
-            const correctPass = decryptProcess(encryptedKey);
-
-            if (input === correctPass) {
+            const errorMsg = document.getElementById('error-msg');
+            
+            // On vérifie "M13S" en direct pour éviter les bugs de décryptage complexes
+            if (input.trim().toUpperCase() === "M13S") {
                 document.getElementById('login-box').style.display = 'none';
                 document.getElementById('cloud-content').style.display = 'block';
                 fetchM13Archives();
             } else {
-                document.getElementById('error-msg').innerText = "!! ERREUR D'AUTHENTIFICATION !!";
+                errorMsg.innerText = "!! ERREUR : CLÉ D'ACCÈS INVALIDE !!";
+                document.getElementById('pass-input').value = "";
             }
+        }
+
+        function handleKeyPress(e) {
+            if (e.key === 'Enter') verifyAccess();
         }
 
         async function fetchM13Archives() {
@@ -84,13 +76,13 @@
                         const a = document.createElement('a');
                         a.href = `./${file.name}`; 
                         a.target = "_blank";
-                        a.innerText = "[RECOVERED] > " + file.name.replace(/[_-]/g, ' ').toUpperCase();
+                        a.innerText = "[RECOVERED_DATA] > " + file.name.replace(/[_-]/g, ' ').toUpperCase();
                         li.appendChild(a);
                         listElement.appendChild(li);
                     }
                 });
             } catch (error) {
-                console.error("M13 Error:", error);
+                console.error("Erreur système M13:", error);
             }
         }
     </script>
