@@ -4,17 +4,69 @@
     <meta charset="UTF-8">
     <title>PROJECT M13 - CLOUD</title>
     <style>
-        body { background: #000; color: #00ff41; font-family: monospace; padding: 20px; }
-        .glitch { font-size: 20px; border-bottom: 1px solid #00ff41; padding-bottom: 10px; }
-        a { color: #fff; text-decoration: none; display: block; margin-top: 20px; font-size: 18px; }
-        a:hover { color: #00ff41; text-shadow: 0 0 8px #00ff41; }
+        body { background: #000; color: #00ff41; font-family: 'Courier New', monospace; padding: 40px; line-height: 1.6; }
+        .glitch { font-size: 24px; border-bottom: 1px solid #00ff41; padding-bottom: 15px; margin-bottom: 30px; letter-spacing: 2px; text-transform: uppercase; }
+        #file-list { list-style: none; padding: 0; }
+        .file-item { margin: 12px 0; display: flex; align-items: center; }
+        .file-item::before { content: "> "; margin-right: 10px; }
+        a { color: #fff; text-decoration: none; font-size: 18px; transition: all 0.3s; }
+        a:hover { color: #00ff41; text-shadow: 0 0 10px #00ff41; padding-left: 10px; }
+        .loading { font-style: italic; opacity: 0.6; }
+        .error { color: #ff4444; }
     </style>
 </head>
 <body>
-    <div class="glitch">SYSTEM_M13_MEMORY_STORAGE [ONLINE]</div>
-    <p>> ACCÈS AUX ARCHIVES PDF :</p>
-    
-    <a href="script_m13_ep1.pdf" target="_blank">_ SCRIPT_EPISODE_1.pdf</a>
 
+    <div class="glitch">SYSTEM_M13_MEMORY_STORAGE [ONLINE]</div>
+    
+    <div id="status">Chargement des archives...</div>
+    <ul id="file-list"></ul>
+
+    <script>
+        // Configuration de ton projet
+        const username = 'wyatt854';
+        const repo = 'm13-cloud';
+        const apiUrl = `https://api.github.com/repos/${username}/${repo}/contents/`;
+
+        async function loadFiles() {
+            const listElement = document.getElementById('file-list');
+            const statusElement = document.getElementById('status');
+
+            try {
+                const response = await fetch(apiUrl);
+                const files = await response.json();
+
+                statusElement.innerText = "> ACCÈS AUX ARCHIVES PDF :";
+                listElement.innerHTML = ""; // On vide la liste
+
+                files.forEach(file => {
+                    // On ne liste que les fichiers PDF et on ignore les fichiers système comme index.html ou CNAME
+                    if (file.name.endsWith('.pdf')) {
+                        const li = document.createElement('li');
+                        li.className = 'file-item';
+                        
+                        const a = document.createElement('a');
+                        a.href = file.name;
+                        a.target = "_blank";
+                        a.innerText = file.name.toUpperCase();
+                        
+                        li.appendChild(a);
+                        listElement.appendChild(li);
+                    }
+                });
+
+                if (listElement.children.length === 0) {
+                    statusElement.innerText = "> AUCUNE ARCHIVE PDF TROUVÉE.";
+                }
+
+            } catch (error) {
+                statusElement.innerText = "> ERREUR DE CONNEXION AU SERVEUR.";
+                statusElement.className = "error";
+                console.error(error);
+            }
+        }
+
+        loadFiles();
+    </script>
 </body>
 </html>
