@@ -10,11 +10,12 @@
         input { background: #000; border: 1px solid #00ff41; color: #00ff41; padding: 10px; font-family: 'Courier New', monospace; outline: none; margin-bottom: 10px; width: 200px; text-align: center; font-size: 16px; }
         button { background: #00ff41; color: #000; border: none; padding: 10px 20px; cursor: pointer; font-weight: bold; font-family: 'Courier New', monospace; text-transform: uppercase; }
         button:hover { background: #fff; box-shadow: 0 0 10px #fff; }
-        #cloud-content { display: none; width: 100%; max-width: 800px; animation: fadeIn 1s; }
-        #file-list { list-style: none; padding: 0; }
-        .file-item { margin: 15px 0; display: flex; align-items: center; padding: 10px; border: 1px solid rgba(0, 255, 65, 0.1); background: rgba(0, 255, 65, 0.02); }
-        .file-item:hover { border: 1px solid #00ff41; background: rgba(0, 255, 65, 0.1); }
-        a { color: #fff; text-decoration: none; font-size: 18px; display: block; width: 100%; }
+        #cloud-content { display: none; width: 100%; max-width: 900px; animation: fadeIn 1s; }
+        #file-list { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; }
+        .file-item { border: 1px solid rgba(0, 255, 65, 0.2); background: rgba(0, 255, 65, 0.02); padding: 12px; transition: 0.3s; display: flex; align-items: center; overflow: hidden; }
+        .file-item:hover { border: 1px solid #00ff41; background: rgba(0, 255, 65, 0.1); transform: translateY(-2px); }
+        .file-icon { margin-right: 12px; font-weight: bold; min-width: 60px; }
+        a { color: #fff; text-decoration: none; font-size: 14px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; display: block; }
         a:hover { color: #00ff41; }
         .error { color: #ff0000; margin-top: 15px; font-size: 13px; font-weight: bold; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -22,7 +23,7 @@
 </head>
 <body>
 
-    <div class="glitch">Bienvenue dans le M13 Cloud !</div>
+    <div class="glitch">Bienvenue dans le cloud !</div>
 
     <div id="login-box">
         <p>> ENTRER CLÉ D'ACCÈS SYSTÈME :</p>
@@ -33,36 +34,31 @@
     </div>
 
     <div id="cloud-content">
-        <div id="status" style="font-style: italic; margin-bottom: 20px; color: #00ff41;">> CONNEXION ÉTABLIE. ARCHIVES DISPONIBLES :</div>
+        <div id="status" style="font-style: italic; margin-bottom: 20px; color: #00ff41;">> RÉCUPÉRATION DES DONNÉES RÉUSSIE.</div>
         <ul id="file-list"></ul>
     </div>
 
     <script>
-        // Version ultra-fiable de la vérification
-        // Le mot de passe est toujours "M13S"
         function verifyAccess() {
             const input = document.getElementById('pass-input').value;
-            const errorMsg = document.getElementById('error-msg');
-            
-            // On vérifie "M13S" en direct pour éviter les bugs de décryptage complexes
             if (input.trim().toUpperCase() === "M13S") {
                 document.getElementById('login-box').style.display = 'none';
                 document.getElementById('cloud-content').style.display = 'block';
                 fetchM13Archives();
             } else {
-                errorMsg.innerText = "!! ERREUR : CLÉ D'ACCÈS INVALIDE !!";
-                document.getElementById('pass-input').value = "";
+                document.getElementById('error-msg').innerText = "!! ERREUR : CLÉ D'ACCÈS INVALIDE !!";
             }
         }
 
-        function handleKeyPress(e) {
-            if (e.key === 'Enter') verifyAccess();
-        }
+        function handleKeyPress(e) { if (e.key === 'Enter') verifyAccess(); }
 
         async function fetchM13Archives() {
             const username = 'wyatt854';
             const repo = 'm13-cloud';
             const listElement = document.getElementById('file-list');
+            
+            // Extensions autorisées (on exclut .html, .js, .css, .json, etc.)
+            const allowedExtensions = ['pdf', 'jpg', 'jpeg', 'png', 'gif', 'exe', 'zip', 'rar', 'mp4', 'mp3', 'txt'];
 
             try {
                 const response = await fetch(`https://api.github.com/repos/${username}/${repo}/contents/`);
@@ -70,19 +66,27 @@
                 listElement.innerHTML = ""; 
 
                 files.forEach(file => {
-                    if (file.name.toLowerCase().endsWith('.pdf')) {
+                    const ext = file.name.split('.').pop().toLowerCase();
+                    
+                    if (allowedExtensions.includes(ext)) {
                         const li = document.createElement('li');
                         li.className = 'file-item';
+                        
+                        let icon = `[${ext.toUpperCase()}]`;
+                        if (['jpg','jpeg','png','gif'].includes(ext)) icon = "[IMG]";
+                        if (ext === 'exe') icon = "[EXEC]";
+                        
                         const a = document.createElement('a');
                         a.href = `./${file.name}`; 
                         a.target = "_blank";
-                        a.innerText = "[RECOVERED_DATA] > " + file.name.replace(/[_-]/g, ' ').toUpperCase();
+                        a.innerHTML = `<span class="file-icon">${icon}</span> ${file.name.toUpperCase()}`;
+                        
                         li.appendChild(a);
                         listElement.appendChild(li);
                     }
                 });
             } catch (error) {
-                console.error("Erreur système M13:", error);
+                console.error("Erreur M13:", error);
             }
         }
     </script>
