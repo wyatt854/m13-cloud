@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>M13 | Authentification Cloud</title>
+    <title>M13 | Validation Cloud</title>
     <style>
-        * { box-sizing: border-box; }
         body {
             background-color: #000;
             color: #0af;
@@ -15,117 +14,100 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            overflow: hidden;
+            text-align: center;
         }
 
         .container {
             border: 2px solid #0af;
-            padding: 40px;
-            border-radius: 15px;
-            background: rgba(0, 10, 20, 0.9);
-            box-shadow: 0 0 30px rgba(0, 170, 255, 0.2);
-            max-width: 400px;
-            width: 90%;
-            text-align: center;
+            padding: 50px;
+            border-radius: 20px;
+            background: rgba(0, 15, 30, 0.95);
+            box-shadow: 0 0 40px rgba(0, 170, 255, 0.3);
+            max-width: 450px;
         }
 
         h1 {
-            font-size: 22px;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            text-shadow: 0 0 10px #0af;
+            font-size: 26px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 15px #0af;
         }
 
         p {
-            font-size: 14px;
             color: #ccc;
-            line-height: 1.6;
+            font-size: 14px;
             margin-bottom: 30px;
         }
 
-        .btn-verify {
+        .btn-sync {
             background: #0af;
             color: #000;
             border: none;
-            padding: 15px 30px;
-            font-size: 16px;
+            padding: 15px 40px;
+            font-size: 18px;
             font-weight: bold;
-            text-transform: uppercase;
             cursor: pointer;
-            border-radius: 5px;
-            transition: all 0.3s ease;
-            width: 100%;
+            border-radius: 8px;
+            transition: 0.3s;
+            text-transform: uppercase;
         }
 
-        .btn-verify:hover {
+        .btn-sync:hover {
             background: #fff;
-            box-shadow: 0 0 20px #fff;
-            transform: scale(1.02);
+            box-shadow: 0 0 25px #fff;
+            transform: scale(1.05);
         }
 
-        .footer-link {
-            display: block;
-            margin-top: 25px;
-            color: #555;
-            text-decoration: none;
-            font-size: 11px;
-        }
-
-        .footer-link:hover {
-            color: #0af;
-        }
-
-        .status-msg {
-            margin-top: 15px;
+        .status {
+            margin-top: 20px;
             font-size: 12px;
-            display: none;
+            color: #555;
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h1>Protocole M13</h1>
-        <p>Veuillez confirmer l'installation de l'extension V2 pour synchroniser votre accès au Cloud.</p>
+        <h1>PROJET M13</h1>
+        <p>Phase de synchronisation V2.0 activée.<br>Cliquez ci-dessous pour lier votre extension.</p>
         
-        <button id="verifyBtn" class="btn-verify">C'est fait merci !</button>
+        <button id="verifyBtn" class="btn-sync">C'est fait merci !</button>
         
-        <div id="status" class="status-msg">Connexion en cours...</div>
-
-        <a href="https://cloud.projectm13.xyz/help/" class="footer-link">Besoin d'aide ? Support technique</a>
+        <div class="status" id="statusText">En attente du signal de l'extension...</div>
     </div>
 
     <script>
-        const verifyBtn = document.getElementById('verifyBtn');
-        const statusMsg = document.getElementById('status');
-        
-        // Ton ID unique (Edge & Chrome)
         const extensionId = "pklmgckangeolhmocidaedofcncgoaol";
+        const btn = document.getElementById('verifyBtn');
+        const status = document.getElementById('statusText');
 
-        verifyBtn.addEventListener('click', () => {
-            statusMsg.style.display = "block";
-            statusMsg.style.color = "#0af";
-            statusMsg.innerText = "Recherche de l'extension...";
-
-            // Vérifie si le navigateur supporte l'envoi de messages
-            if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.sendMessage) {
-                
-                chrome.runtime.sendMessage(extensionId, { action: "CHECK_UPDATE_DONE" }, (response) => {
-                    // Si une erreur survient ou si l'extension n'est pas trouvée
-                    if (chrome.runtime.lastError) {
-                        console.log("Erreur:", chrome.runtime.lastError.message);
-                        alert("Mince, tu l'as mal fait ! L'extension n'est pas détectée. Vérifie qu'elle est bien chargée dans chrome://extensions");
-                        window.location.href = "https://cloud.projectm13.xyz/help/";
-                    } else {
-                        // Succès
-                        alert("BIEN JOUÉ ! Synchronisation terminée.");
-                        window.close();
-                    }
-                });
+        btn.addEventListener('click', () => {
+            // Tentative de ping vers l'extension
+            if (typeof chrome !== 'undefined' && chrome.runtime) {
+                try {
+                    chrome.runtime.sendMessage(extensionId, { action: "PING" }, (response) => {
+                        if (chrome.runtime.lastError) {
+                            // Si l'extension ne répond pas au message direct
+                            alert("L'extension est détectée mais ne répond pas. Fermez cette page et rouvrez-la.");
+                        } else {
+                            alert("SYNCHRONISATION TERMINÉE !");
+                            window.close();
+                        }
+                    });
+                } catch (e) {
+                    // Méthode de secours si le message échoue
+                    alert("Signal envoyé ! Si rien ne se passe, vérifiez que l'extension est bien active.");
+                    window.close();
+                }
             } else {
-                alert("Erreur système : Navigateur non compatible ou API runtime absente.");
-                window.location.href = "https://cloud.projectm13.xyz/help/";
+                alert("Erreur : Navigateur non compatible.");
+            }
+        });
+
+        // Auto-détection (Optionnel : ferme la page si l'extension envoie un signal)
+        window.addEventListener("message", (event) => {
+            if (event.data && event.data.type === "M13_SYNC_OK") {
+                alert("Extension synchronisée automatiquement !");
+                window.close();
             }
         });
     </script>
