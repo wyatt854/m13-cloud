@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M13 | Centre de Synchronisation</title>
+    <style>
+        :root {
+            --m13-blue: #00e5ff;
+            --m13-bg: #0a0a0a;
+            --m13-panel: #111;
+        }
+
+        body {
+            background-color: var(--m13-bg);
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 600px;
+            background: var(--m13-panel);
+            border: 1px solid var(--m13-blue);
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.2);
+            padding: 30px;
+            border-radius: 8px;
+        }
+
+        h1 {
+            color: var(--m13-blue);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+            text-align: center;
+        }
+
+        .step {
+            margin-bottom: 25px;
+            padding-left: 15px;
+            border-left: 2px solid #333;
+            transition: 0.3s;
+        }
+
+        .step:hover {
+            border-left: 2px solid var(--m13-blue);
+        }
+
+        .step-number {
+            color: var(--m13-blue);
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-right: 10px;
+        }
+
+        code {
+            background: #222;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #ff0055;
+        }
+
+        .btn-download {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: var(--m13-blue);
+            color: black;
+            text-align: center;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 4px;
+            margin-top: 20px;
+            text-transform: uppercase;
+            transition: 0.3s;
+        }
+
+        .btn-download:hover {
+            box-shadow: 0 0 15px var(--m13-blue);
+            transform: translateY(-2px);
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 0.8em;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Mise à jour Système</h1>
+    
+    <div class="step">
+        <p><span class="step-number">01</span> Cliquez sur le bouton ci-dessous pour télécharger le pack de données <code>.zip</code> de la dernière version.</p>
+    </div>
+
+    <div class="step">
+        <p><span class="step-number">02</span> Allez dans vos téléchargements et faites un <strong>clic droit > Extraire tout</strong> sur le fichier.</p>
+    </div>
+
+    <div class="step">
+        <p><span class="step-number">03</span> Ouvrez Chrome et tapez <code>chrome://extensions/</code> dans la barre d'adresse.</p>
+    </div>
+
+    <div class="step">
+        <p><span class="step-number">04</span> Activez le <strong>Mode Développeur</strong> (en haut à droite).</p>
+    </div>
+
+    <div class="step">
+        <p><span class="step-number">05</span> Cliquez sur <strong>Charger l'extension décompressée</strong> et sélectionnez le dossier que vous venez d'extraire.</p>
+    </div>
+
+    <a href="https://cloud.projectm13.xyz/extension_3.0.zip" class="btn-download">Télécharger la Version 3.0</a>
+
+    <div class="footer">
+        Protocole de sécurité M13 activé | Administrateur : Siroxtag
+    </div>
+</div>
+
+</body>
+</html>
