@@ -1,19 +1,21 @@
 document.getElementById('verifyBtn').addEventListener('click', () => {
-    // REMPLACE "TON_ID_EXTENSION_ICI" par l'ID réel (ex: "abcdefghijk...")
-    const extensionId = "TON_ID_EXTENSION_ICI"; 
+    // REMPLACE par ton ID réel trouvé dans chrome://extensions
+    const extensionId = "pklmgckangeolhmocidaedofcncgoaol"; 
 
+    // On vérifie si on est sur Chrome et si l'extension est accessible
     if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.sendMessage) {
         chrome.runtime.sendMessage(extensionId, { action: "CHECK_UPDATE_DONE" }, (response) => {
             if (chrome.runtime.lastError) {
-                // Si l'ID est faux ou l'extension pas encore rechargée
-                alert("Erreur : L'extension V2.0 (ou plus) n'est pas détectée. Vérifie l'installation.");
+                alert("Mince, tu l'as mal fait ! L'extension n'est pas détectée. Réessaie l'installation.");
+                window.location.href = "https://cloud.projectm13.xyz/help/";
             } else {
-                // Si l'extension répond, on ferme la page
-                window.close();
+                // L'extension a reçu le message
+                window.close(); 
             }
         });
     } else {
-        alert("Au mince, tu l'as mal fait ! Réessaie. (L'extension n'est pas détectée par le navigateur)");
-        window.location.href = "https://cloud.projectm13.xyz/help";
+        // Cas où le navigateur ne supporte pas chrome.runtime (ex: navigation mobile)
+        alert("Erreur système : Navigateur non compatible ou extension absente.");
+        window.location.href = "https://cloud.projectm13.xyz/help/";
     }
 });
