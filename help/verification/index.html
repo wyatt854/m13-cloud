@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>M13 | Validation</title>
+    <style>
+        body { background: #000; color: #0af; font-family: monospace; text-align: center; padding: 50px; }
+        .btn-check { 
+            background: #0af; color: #000; border: none; padding: 15px 30px; 
+            font-weight: bold; cursor: pointer; border-radius: 5px; box-shadow: 0 0 15px #0af;
+        }
+        .btn-check:hover { background: #fff; }
+    </style>
+</head>
+<body>
+    <h1>SYNCHRONISATION FINALE</h1>
+    <p>Une fois que vous avez installé la nouvelle version dans Chrome :</p>
+    
+    <button class="btn-check" id="verifyBtn">C'est fait merci !</button>
+
+    <script>
+        document.getElementById('verifyBtn').addEventListener('click', () => {
+            // Envoie un message à l'extension
+            chrome.runtime.sendMessage("votre_id_extension_ici", { action: "CHECK_UPDATE_DONE" }, (response) => {
+                if (chrome.runtime.lastError) {
+                    alert("Erreur : L'extension ne semble pas être active ou installée.");
+                } else {
+                    window.close(); // Ferme la page si l'extension a répondu
+                }
+            });
+        });
+    </script>
+</body>
+</html>
