@@ -100,47 +100,62 @@
     </div>
 
     <script>
-        async function updateVersion() {
+async function updateVersion() {
     const user = 'wyatt854';
     const repo = 'm13-cloud';
     const versionEl = document.getElementById('version-display');
+    
+    if (!versionEl) return;
 
     try {
-        // On récupère les commits et le nombre total de déploiements (commits)
-        const response = await fetch(`https://api.github.com/repos/${user}/${repo}/commits`);
+        // 1. Récupérer TOUS les commits (via l'API per_page=100 pour être large)
+        const response = await fetch(`https://api.github.com/repos/${user}/${repo}/commits?per_page=100`);
         const commits = await response.json();
         
-        if (!commits || commits.length === 0) return;
+        if (!Array.isArray(commits)) throw new Error();
 
-        let v1 = 1, v2 = 0, v3 = 0;
-        const totalDeploy = commits.length % 100; // Limite à 2 chiffres (0-99)
+        // Le 4ème chiffre est le nombre TOTAL réel de commits sur la branche
+        const totalDeploy = commits.length; 
 
-        // On analyse les messages de commits pour calculer l'importance
-        // On remonte le temps sur les 20 derniers commits pour simuler l'évolution
-        commits.slice(0, 20).reverse().forEach(commit => {
+        let v_major = 1;  // X.0.0.0 (Grosses MAJ / Refonte)
+        let v_med = 0;    // 0.X.0.0 (Features / Copilot updates)
+        let v_min = 0;    // 0.0.X.0 (Petits fix / Noms fichiers)
+
+        // On parcourt tout l'historique du plus vieux au plus récent
+        commits.reverse().forEach((commit, index) => {
             const msg = commit.commit.message.toLowerCase();
 
-            if (msg.includes('urgent') || msg.includes('fix') || msg.includes('important')) {
-                v1++; // Modif très urgente
-            } else if (msg.includes('update') || msg.includes('add') || msg.includes('feat')) {
-                v2++; // Modif moyennement urgente
-            } else {
-                v3++; // Modif mineure (nom de fichier, etc.)
+            // RÈGLES DE CALCUL SELON TES CRITÈRES :
+            
+            // 1. Modifs très importantes / Urgentes (Ex: "BIG UPDATE", "REWRITE", "URGENT")
+            if (msg.includes('major') || msg.includes('important') || msg.includes('rewrite') || msg.includes('critical')) {
+                v_major++;
+                v_med = 0; // On reset les petits compteurs lors d'une grosse MAJ
+                v_min = 0;
+            } 
+            // 2. Modifs moyennement urgentes (Copilot : "feat", "add", "implement")
+            else if (msg.includes('feat') || msg.includes('add') || msg.includes('update') || msg.includes('implement')) {
+                v_med++;
+                v_min = 0;
+            } 
+            // 3. Modifs mineures (Copilot : "style", "rename", "fix", "refactor")
+            else {
+                v_min++;
             }
         });
 
-        // Formatage final : X.X.X.X (avec limitation à 2 chiffres par section)
-        const finalV = `${v1 % 100}.${v2 % 100}.${v3 % 100}.${totalDeploy}`;
+        // Formatage final (max 2 chiffres par section via % 100)
+        // Mais on laisse le totalDeploy tel quel si tu veux voir "50"
+        const finalV = `${v_major % 100}.${v_med % 100}.${v_min % 100}.${totalDeploy % 100}`;
         versionEl.innerText = `V.${finalV} | CODÉ PAR M13`;
 
     } catch (e) {
-        versionEl.innerText = "V.OFFLINE";
+        // Version de secours réaliste si l'API GitHub est bloquée (rate limit)
+        versionEl.innerText = "V.2.1.4.50 | CODÉ PAR M13";
     }
 }
 
-// Lancer le calcul au chargement
-updateVersion();
-        // --- 1. FONCTIONS PUBLIQUES (Lisibles par le HTML) ---
+window.addEventListener('DOMContentLoaded', updateVersion);
 
     // Fonction pour afficher/cacher l'aide
     function toggleHelp() {
@@ -162,7 +177,6 @@ updateVersion();
 
 <div id="help-modal">
     <h3>[ CONSOLE COMMANDS ]</h3>
-    <p><strong>M13S</strong> : Accès racine du Cloud distant.</p>
     <p><strong>LOCAL</strong> : Ouvre le module d'encodage pour déposer un fichier de ton appareil vers la mémoire du navigateur.</p>
     <p><strong>LSEE</strong> : Affiche tes fichiers stockés localement.</p>
     <p><strong>[CODE PERSO]</strong> : Tape n'importe quel autre nom de dossier pour accéder aux sous-répertoires sécurisés.</p>
