@@ -6,6 +6,7 @@
     <title>Cloud M13</title>
     <style>
         #version-display {
+    z-index: 999
     letter-spacing: 1px;
     text-transform: uppercase;
     background: rgba(0, 255, 65, 0.1);
@@ -16,6 +17,7 @@
 @media screen and (max-width: 600px) {
     /* On réduit la taille du texte de version */
     #version-display {
+        z-index: 999
         bottom: 10px;
         left: 10px;
         font-size: 8px;
@@ -147,6 +149,48 @@
     </div>
 
     <script>
+        function openPreview(url, name) {
+    const modal = document.getElementById('preview-modal');
+    const body = document.getElementById('preview-body');
+    const title = document.getElementById('preview-title');
+    const ext = name.split('.').pop().toLowerCase();
+
+    title.innerText = name.toUpperCase();
+    body.innerHTML = ""; // On vide le contenu précédent
+    modal.style.display = "flex";
+
+    if (['jpg', 'jpeg', 'png', 'gif'].includes(ext)) {
+        body.innerHTML = `<img src="${url}" style="max-width:100%; max-height:100%; display:block; margin:auto;">`;
+    } 
+    else if (ext === 'pdf') {
+        body.innerHTML = `<iframe src="${url}" style="width:100%; height:100%; border:none;" type="application/pdf"></iframe>`;
+    } 
+    else if (ext === 'txt') {
+        fetch(url).then(res => res.text()).then(text => {
+            body.innerHTML = `<pre style="white-space:pre-wrap; font-family:monospace; color:#00ff41;">${text}</pre>`;
+        });
+    } 
+    else {
+        body.innerHTML = `<p>Format non pris en charge en prévisualisation directe.</p>
+                          <a href="${url}" target="_blank" style="color:#00ff41;">[ CLIQUEZ ICI POUR TÉLÉCHARGER ]</a>`;
+    }
+}
+
+function closePreview() {
+    // --- INTERCEPTEUR POUR LA VISIONNEUSE ---
+document.addEventListener('click', function(e) {
+    // On cherche si on a cliqué sur un lien de fichier
+    const link = e.target.closest('.file-link');
+    if (link) {
+        e.preventDefault(); // Empêche l'ouverture dans un nouvel onglet
+        const fileUrl = link.href;
+        const fileName = link.innerText.replace(/\[.*?\]\s*/, ''); // Nettoie le nom (enlève [PDF])
+        openPreview(fileUrl, fileName);
+    }
+}, true);
+    document.getElementById('preview-modal').style.display = "none";
+    document.getElementById('preview-body').innerHTML = ""; // Stop le PDF/Vidéo en fermant
+}
 async function updateVersion() {
     const user = 'wyatt854';
     const repo = 'm13-cloud';
@@ -230,6 +274,16 @@ window.addEventListener('DOMContentLoaded', updateVersion);
     <hr style="border:0; border-top:1px solid #222;">
     <p><em>Note : Le stockage local est limité à ~5Mo. Les fichiers sont convertis en Base64.</em></p>
     <div class="m13-footer">CODÉ PAR M13</div>
+</div>
+    <div id="preview-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:2000; flex-direction:column; align-items:center; justify-content:center;">
+    <div style="width:90%; height:80%; background:#111; border:1px solid #00ff41; position:relative; display:flex; flex-direction:column;">
+        <div style="background:#00ff41; color:#000; padding:5px 10px; display:flex; justify-content:space-between; font-weight:bold;">
+            <span id="preview-title">FICHIER</span>
+            <span onclick="closePreview()" style="cursor:pointer; padding:0 10px;">[ FERMER / X ]</span>
+        </div>
+        <div id="preview-body" style="flex-grow:1; overflow:auto; padding:10px; color:#00ff41;">
+            </div>
+    </div>
 </div>
 </body>
 </html>
