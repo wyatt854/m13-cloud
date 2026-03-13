@@ -1,9 +1,56 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
     <title>Cloud M13</title>
     <style>
+        #version-display {
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    background: rgba(0, 255, 65, 0.1);
+    padding: 2px 8px;
+    border-radius: 2px;
+}
+        /* --- OPTIMISATION MOBILE --- */
+@media screen and (max-width: 600px) {
+    /* On réduit la taille du texte de version */
+    #version-display {
+        bottom: 10px;
+        left: 10px;
+        font-size: 8px;
+        max-width: 50%; /* Évite de toucher le bouton aide */
+    }
+
+    /* On adapte le bouton Aide */
+    #help-trigger {
+        bottom: 10px;
+        right: 10px;
+        padding: 4px 8px;
+        font-size: 12px;
+    }
+
+    /* La fenêtre d'aide prend plus de place sur mobile */
+    #help-modal {
+        width: 85%;
+        right: 5%;
+        bottom: 50px;
+        font-size: 11px;
+    }
+
+    /* On ajuste la boîte de login pour qu'elle ne soit pas trop large */
+    #login-box {
+        width: 90%;
+        padding: 15px;
+    }
+
+    /* On agrandit les liens des fichiers pour pouvoir cliquer avec le doigt */
+    .file-item {
+        padding: 12px 5px;
+        margin-bottom: 8px;
+        border: 1px solid #222;
+    }
+}
         /* Bouton d'aide en bas à droite */
 #help-trigger {
     position: fixed;
