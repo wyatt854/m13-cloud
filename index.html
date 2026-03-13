@@ -4,188 +4,168 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
     <title>Cloud M13</title>
+    
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    
     <style>
-        #version-display {
-            z-index: 999;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            background: rgba(0, 255, 65, 0.1);
-            padding: 2px 8px;
-            border-radius: 2px;
-        }
+        #version-display { z-index: 999; letter-spacing: 1px; text-transform: uppercase; background: rgba(0, 255, 65, 0.1); padding: 2px 8px; border-radius: 2px; }
+        body { background: #000; color: #00ff41; font-family: 'Courier New', monospace; padding: 20px; line-height: 1.6; display: flex; flex-direction: column; align-items: center; min-height: 100vh; margin: 0; }
+        .glitch { font-size: 24px; border-bottom: 2px solid #00ff41; padding-bottom: 15px; margin-bottom: 30px; text-transform: uppercase; text-align: center; width: 100%; max-width: 600px; text-shadow: 2px 0px #ff0000;}
         
-        @media screen and (max-width: 600px) {
-            #version-display { bottom: 10px; left: 10px; font-size: 8px; max-width: 50%; }
-            #help-trigger { bottom: 10px; right: 10px; padding: 4px 8px; font-size: 12px; }
-            #help-modal { width: 85%; right: 5%; bottom: 50px; font-size: 11px; }
-            #login-box { width: 90%; padding: 15px; }
-            .file-item { padding: 12px 5px; margin-bottom: 8px; border: 1px solid #222; }
-        }
+        #login-box, #local-upload-box { border: 1px solid #00ff41; padding: 30px; background: rgba(0, 255, 65, 0.05); text-align: center; width: 100%; max-width: 400px; box-shadow: 0 0 15px rgba(0, 255, 65, 0.2); }
+        #local-upload-box { display: none; }
         
-        #help-trigger { position: fixed; bottom: 20px; right: 20px; background: #00ff41; color: #000; padding: 5px 12px; font-weight: bold; cursor: pointer; border-radius: 3px; font-size: 14px; z-index: 1000; }
-        #help-modal { display: none; position: fixed; bottom: 60px; right: 20px; width: 300px; background: #000; border: 1px solid #00ff41; padding: 15px; box-shadow: 0 0 20px rgba(0, 255, 65, 0.2); z-index: 1000; font-size: 12px; text-align: left; }
-        #help-modal h3 { margin-top: 0; color: #fff; border-bottom: 1px solid #00ff41; padding-bottom: 5px; }
-        .m13-footer { margin-top: 15px; font-size: 10px; text-align: right; color: #888; border-top: 1px dashed #444; padding-top: 5px; }
-        
-        body { background: #000; color: #00ff41; font-family: 'Courier New', monospace; padding: 40px; line-height: 1.6; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 80vh; margin: 0; }
-        .glitch { font-size: 24px; border-bottom: 2px solid #00ff41; padding-bottom: 15px; margin-bottom: 30px; letter-spacing: 2px; text-transform: uppercase; text-shadow: 2px 0px #ff0000; text-align: center;}
-        
-        #login-box, #local-upload-box { border: 1px solid #00ff41; padding: 30px; background: rgba(0, 255, 65, 0.05); text-align: center; box-shadow: 0 0 15px rgba(0, 255, 65, 0.2); }
-        #local-upload-box { display: none; margin-top: 20px; }
-        
-        input[type="password"], input[type="text"], input[type="file"] { background: #000; border: 1px solid #00ff41; color: #00ff41; padding: 10px; font-family: 'Courier New', monospace; outline: none; margin-bottom: 15px; width: 250px; text-align: center; font-size: 16px; }
-        
-        button { background: #00ff41; color: #000; border: none; padding: 10px 20px; cursor: pointer; font-weight: bold; font-family: 'Courier New', monospace; text-transform: uppercase; margin: 5px; }
+        input { background: #000; border: 1px solid #00ff41; color: #00ff41; padding: 10px; font-family: 'Courier New', monospace; margin-bottom: 15px; width: 80%; text-align: center; outline: none; }
+        button { background: #00ff41; color: #000; border: none; padding: 10px 20px; cursor: pointer; font-weight: bold; text-transform: uppercase; margin: 5px; transition: 0.3s; }
         button:hover { background: #fff; box-shadow: 0 0 10px #fff; }
         .btn-danger { background: #ff0000; color: white; }
         
-        #cloud-content { display: none; width: 100%; max-width: 900px; animation: fadeIn 1s; }
+        #cloud-content { display: none; width: 100%; max-width: 800px; }
         #file-list { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px; }
-        .file-item { border: 1px solid rgba(0, 255, 65, 0.2); background: rgba(0, 255, 65, 0.02); padding: 12px; display: flex; align-items: center; justify-content: space-between; }
-        .file-item:hover { border: 1px solid #00ff41; background: rgba(0, 255, 65, 0.1); }
         
-        a.file-link { color: #fff; text-decoration: none; font-size: 14px; overflow: hidden; display: flex; align-items: center; flex-grow: 1; cursor: pointer; }
+        .file-item { border: 1px solid rgba(0, 255, 65, 0.3); background: rgba(0, 255, 65, 0.05); padding: 15px; display: flex; flex-direction: column; justify-content: space-between; transition: 0.3s; }
+        .file-item:hover { border-color: #fff; background: rgba(0, 255, 65, 0.1); }
         
-        .error { color: #ff0000; margin-top: 15px; font-size: 13px; font-weight: bold; }
-        .success { color: #00ff41; margin-top: 15px; font-size: 13px; font-weight: bold; }
+        .file-link { color: #fff; text-decoration: none; font-weight: bold; font-size: 14px; margin-bottom: 15px; display: block; overflow: hidden; text-overflow: ellipsis; }
+        .file-link:hover { color: #00ff41; }
         
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .actions { display: flex; gap: 10px; border-top: 1px solid #222; padding-top: 10px; }
+        .btn-dl { flex: 1; text-align: center; background: #00ff41; color: #000; padding: 5px; text-decoration: none; font-size: 11px; font-weight: bold; }
+        .btn-del { background: #ff0000; color: #fff; border: none; padding: 5px 10px; cursor: pointer; font-size: 11px; }
 
-        /* Visionneuse */
-        #preview-modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:2000; flex-direction:column; align-items:center; justify-content:center; }
-        .preview-container { width:95%; height:90%; background:#050505; border:1px solid #00ff41; display:flex; flex-direction:column; }
-        .preview-header { background:#00ff41; color:#000; padding:8px 15px; display:flex; justify-content:space-between; align-items:center; font-weight:bold; }
-        #preview-body { flex-grow:1; overflow:auto; display:flex; justify-content:center; align-items:center; background:#000; }
-        .dl-btn { background: #000; color: #00ff41; border: 1px solid #000; padding: 2px 10px; text-decoration: none; font-size: 12px; margin-right: 10px; }
-        .dl-btn:hover { background: #fff; color: #000; }
+        #help-trigger { position: fixed; bottom: 20px; right: 20px; background: #00ff41; color: #000; padding: 5px 12px; cursor: pointer; font-weight: bold; z-index: 1000; border-radius: 2px; }
+        #help-modal { display: none; position: fixed; bottom: 60px; right: 20px; width: 280px; background: #000; border: 1px solid #00ff41; padding: 15px; z-index: 1000; font-size: 12px; box-shadow: 0 0 20px rgba(0,255,65,0.3); }
     </style>
 </head>
 <body>
-    <div id="version-display" style="position: fixed; bottom: 20px; left: 20px; color: #00ff41; font-size: 10px; font-family: 'Courier New', monospace; opacity: 0.7;">V. LOADING...</div>
+    <div id="version-display" style="position: fixed; bottom: 20px; left: 20px; color: #00ff41; font-size: 10px; opacity: 0.7;">V. LOADING...</div>
 
     <div class="glitch">SYSTEM CLOUD M13</div>
 
     <div id="login-box">
-        <p>> ENTRER CLÉ D'ACCÈS SYSTÈME :</p>
-        <input type="password" id="pass-input" placeholder="CODE / DOSSIER" onkeypress="handleKeyPress(event)">
+        <p>> ENTRER CLÉ SYSTÈME :</p>
+        <input type="password" id="pass-input" placeholder="CODE / DOSSIER" onkeypress="if(event.key==='Enter')verifyAccess()">
         <br>
         <button onclick="verifyAccess()">DÉCRYPTER</button>
-        <div id="error-msg" class="error"></div>
+        <div id="error-msg" style="color:red; margin-top:10px; font-size: 12px;"></div>
     </div>
 
     <div id="local-upload-box">
-        <p>> UPLOAD SÉCURISÉ :</p>
-        <input type="file" id="local-file-input">
-        <br>
-        <button onclick="saveLocalFile()">ENCODER</button>
-        <button class="btn-danger" onclick="retourLogin()">RETOUR</button>
-        <div id="upload-status" class="success"></div>
+        <p>> ENCODEUR LOCAL :</p>
+        <input type="file" id="local-file-input"><br>
+        <button onclick="saveLocalFile()">SAUVEGARDER</button>
+        <button class="btn-danger" onclick="location.reload()">RETOUR</button>
+        <div id="upload-status" style="margin-top:10px;"></div>
     </div>
 
     <div id="cloud-content">
-        <button onclick="retourLogin()" style="margin-bottom: 20px;">[X] FERMER LA SESSION</button>
-        <div id="status" style="font-style: italic; margin-bottom: 20px; color: #00ff41;"></div>
-        <ul id="file-list"></ul>
-    </div>
-
-    <div id="preview-modal">
-        <div class="preview-container">
-            <div class="preview-header">
-                <span id="preview-title">FICHIER</span>
-                <div>
-                    <a id="download-btn-link" href="#" download class="dl-btn">TÉLÉCHARGER</a>
-                    <span onclick="closePreview()" style="cursor:pointer;">[ FERMER X ]</span>
-                </div>
-            </div>
-            <div id="preview-body"></div>
-        </div>
+        <button onclick="location.reload()" style="margin-bottom: 20px;">[X] FERMER LA SESSION</button>
+        <div id="status" style="margin-bottom: 20px; font-style: italic; color: #00ff41;"></div>
+        <div id="file-list"></div>
     </div>
 
     <script>
-        // 1. VISIONNEUSE
-        function openPreview(url, name) {
-            const modal = document.getElementById('preview-modal');
-            const body = document.getElementById('preview-body');
-            const title = document.getElementById('preview-title');
-            const dlLink = document.getElementById('download-btn-link');
-            
-            let ext = name.split('.').pop().toLowerCase().trim();
-            title.innerText = name.toUpperCase();
-            dlLink.href = url;
-            dlLink.download = name;
-            
-            body.innerHTML = "<p style='color:#00ff41'>CHARGEMENT DU MODULE DE VISIONNAGE...</p>";
-            modal.style.display = "flex";
+        const username = 'wyatt854';
+        const repo_name = 'm13-cloud';
+        const allowedExtensions = ['jpg','jpeg','png','gif','pdf','txt','mp4','mp3','zip','rar','exe'];
 
-            setTimeout(() => {
-                if (['jpg', 'jpeg', 'png', 'gif'].includes(ext)) {
-                    body.innerHTML = `<img src="${url}" style="max-width:100%; max-height:100%; object-fit:contain;">`;
-                } 
-                else if (ext === 'pdf') {
-                    body.innerHTML = `<iframe src="${url}" width="100%" height="100%" style="border:none;"></iframe>`;
-                } 
-                else if (['txt', 'js', 'css', 'html'].includes(ext)) {
-                    fetch(url).then(res => res.text()).then(text => {
-                        body.innerHTML = `<pre style="width:100%; padding:20px; color:#00ff41; white-space:pre-wrap;">${text.replace(/</g, "&lt;")}</pre>`;
-                    }).catch(() => body.innerHTML = "<p>Erreur de lecture texte.</p>");
-                } 
-                else {
-                    body.innerHTML = `<div style="text-align:center;"><p>Aperçu impossible pour ce format.</p><br><a href="${url}" download="${name}" style="color:#000; background:#00ff41; padding:10px; text-decoration:none; font-weight:bold;">CLIQUEZ ICI POUR TÉLÉCHARGER</a></div>`;
-                }
-            }, 300);
+        function verifyAccess() {
+            const val = document.getElementById('pass-input').value.trim().toUpperCase();
+            if (val === 'M13S') { showCloud(); fetchGitHub(''); }
+            else if (val === 'LOCAL') { document.getElementById('login-box').style.display='none'; document.getElementById('local-upload-box').style.display='block'; }
+            else if (val === 'LSEE') { showCloud(); fetchLocal(); }
+            else if (val !== '') { showCloud(); fetchGitHub('Code/' + val); }
+            else { document.getElementById('error-msg').innerText = "!! ACCÈS REFUSÉ !!"; }
         }
 
-        function closePreview() {
-            document.getElementById('preview-modal').style.display = "none";
-            document.getElementById('preview-body').innerHTML = "";
+        function showCloud() {
+            document.getElementById('login-box').style.display='none';
+            document.getElementById('cloud-content').style.display='block';
         }
 
-        // Intercepteur de clic pour la visionneuse
-        document.addEventListener('click', function(e) {
-            let el = e.target.closest('.file-link');
-            if (el && !e.target.classList.contains('delete-btn')) {
-                e.preventDefault();
-                const fileUrl = el.href;
-                const fileName = el.getAttribute('data-name') || el.innerText.replace(/\[.*?\]\s*/, '').trim();
-                openPreview(fileUrl, fileName);
-            }
-        });
-
-        // 2. VERSION GITHUB
-        async function updateVersion() {
-            const user = 'wyatt854'; const repo = 'm13-cloud';
+        async function fetchGitHub(path) {
+            const list = document.getElementById('file-list');
+            document.getElementById('status').innerText = "> LECTURE DU SECTEUR : " + (path || "ROOT");
             try {
-                const response = await fetch(`https://api.github.com/repos/${user}/${repo}/commits`);
-                const commits = await response.json();
-                if (Array.isArray(commits)) {
-                    document.getElementById('version-display').innerText = `V.1.0.${commits.length} | CODÉ PAR M13`;
-                }
-            } catch (e) { document.getElementById('version-display').innerText = "V.2.1.4.50 | CODÉ PAR M13"; }
-        }
-        window.addEventListener('DOMContentLoaded', updateVersion);
+                const res = await fetch(`https://api.github.com/repos/${username}/${repo_name}/contents/${path}`);
+                const data = await res.json();
+                list.innerHTML = '';
+                if (!Array.isArray(data)) throw new Error();
 
-        // 3. UI NAVIGATION
-        function toggleHelp() {
-            const m = document.getElementById('help-modal');
-            m.style.display = (m.style.display === 'block') ? 'none' : 'block';
+                data.forEach(file => {
+                    const ext = file.name.split('.').pop().toLowerCase();
+                    if (allowedExtensions.includes(ext)) {
+                        const div = document.createElement('div');
+                        div.className = 'file-item';
+                        div.innerHTML = `
+                            <a href="${file.download_url}" target="_blank" class="file-link">
+                                <span style="color:#00ff41">[${ext.toUpperCase()}]</span><br>${file.name}
+                            </a>
+                            <div class="actions">
+                                <a href="${file.download_url}" download="${file.name}" class="btn-dl">TÉLÉCHARGER</a>
+                            </div>`;
+                        list.appendChild(div);
+                    }
+                });
+            } catch (e) { document.getElementById('status').innerText = "!! ERREUR SYSTÈME !!"; }
         }
 
-        // --- CODE OBFUSQUÉ RÉ-INTÉGRÉ ---
-        const _0x359362=_0x4af8;(function(_0x24f809,_0x26c686){const _0x308b56=_0x4af8,_0x34bc2f=_0x24f809();while(!![]){try{const _0x1ca148=-parseInt(_0x308b56(0xf7))/0x1+-parseInt(_0x308b56(0xe6))/0x2+-parseInt(_0x308b56(0xe8))/0x3+parseInt(_0x308b56(0xbc))/0x4+parseInt(_0x308b56(0xb7))/0x5+-parseInt(_0x308b56(0xc1))/0x6*(parseInt(_0x308b56(0xe4))/0x7)+parseInt(_0x308b56(0xc5))/0x8;if(_0x1ca148===_0x26c686)break;else _0x34bc2f['push'](_0x34bc2f['shift']());}catch(_0x3fd3e5){_0x34bc2f['push'](_0x34bc2f['shift']());}}}(_0x50b9,0x1cd7d));const username=_0x359362(0xc7),repo_name=_0x359362(0xf9),allowedExtensions=[_0x359362(0xf0),_0x359362(0xfc),_0x359362(0xfe),_0x359362(0x111),_0x359362(0xba),_0x359362(0xea),_0x359362(0x103),_0x359362(0x10d),_0x359362(0xdd),'mp3',_0x359362(0xd3)];function _0x4af8(_0x417866,_0x5a6abe){_0x417866=_0x417866-0xb1;const _0x50b98c=_0x50b9();let _0x4af8f6=_0x50b98c[_0x417866];return _0x4af8f6;}function handleKeyPress(_0x1a6fd1){if(_0x1a6fd1['key']==='Enter')verifyAccess();}function retourLogin(){document.getElementById('login-box').style.display='block';document.getElementById('cloud-content').style.display='none';document.getElementById('local-upload-box').style.display='none';}function verifyAccess(){const _0x4bd63e=_0x359362,_0x73c79=document[_0x4bd63e(0xd0)](_0x4bd63e(0xf1))['value']['trim'](),_0x31b15b=_0x73c79['toUpperCase']();if(_0x31b15b==='M13S'){showCloudUI();fetchGitHubFiles('');}else if(_0x31b15b==='LOCAL'){document.getElementById('login-box').style.display='none';document.getElementById('local-upload-box').style.display='block';}else if(_0x31b15b==='LSEE'){showCloudUI();fetchLocalFiles();}else if(_0x73c79!==''){showCloudUI();fetchGitHubFiles('Code/'+_0x73c79);}else{document.getElementById('error-msg').innerText='CLÉ VALIDE REQUISE';}}function showCloudUI(){document.getElementById('login-box').style.display='none';document.getElementById('cloud-content').style.display='block';}
-        async function fetchGitHubFiles(path){const list=document.getElementById('file-list');document.getElementById('status').innerText="CHARGEMENT...";try{const res=await fetch(`https://api.github.com/repos/${username}/${repo_name}/contents/${path}`);const data=await res.json();list.innerHTML='';data.forEach(file=>{const ext=file.name.split('.').pop().toLowerCase();if(allowedExtensions.includes(ext)){const li=document.createElement('li');li.className='file-item';li.innerHTML=`<a href="${file.download_url}" class="file-link" data-name="${file.name}">[${ext.toUpperCase()}] ${file.name}</a>`;list.appendChild(li);}});document.getElementById('status').innerText="ACCÈS RÉUSSI : "+(path||"ROOT");}catch(e){document.getElementById('status').innerText="ERREUR DE CONNEXION";}}
-        function saveLocalFile(){const input=document.getElementById('local-file-input');const file=input.files[0];if(!file)return;const reader=new FileReader();reader.onload=function(e){let files=JSON.parse(localStorage.getItem('m13_local_files')||'[]');files.push({id:Date.now(),name:file.name,data:e.target.result,type:file.name.split('.').pop()});localStorage.setItem('m13_local_files',JSON.stringify(files));document.getElementById('upload-status').innerText="ENCODÉ !";fetchLocalFiles();};reader.readAsDataURL(file);}
-        function fetchLocalFiles(){const list=document.getElementById('file-list');list.innerHTML='';let files=JSON.parse(localStorage.getItem('m13_local_files')||'[]');files.forEach(f=>{const li=document.createElement('li');li.className='file-item';li.innerHTML=`<a href="${f.data}" class="file-link" data-name="${f.name}">[LOCAL] ${f.name}</a><button class="delete-btn" onclick="deleteLocalFile(${f.id})">SUPPR</button>`;list.appendChild(li);});}
-        function deleteLocalFile(id){let files=JSON.parse(localStorage.getItem('m13_local_files')||'[]');files=files.filter(f=>f.id!==id);localStorage.setItem('m13_local_files',JSON.stringify(files));fetchLocalFiles();}
-        function _0x50b9(){const _0xedc26e=['upload-status','getElementById','RACINE\x20DU\x20SYSTÈME','LSEE','txt','includes','result','pop','!!\x20ERREUR\x20:\x20VEUILLEZ\x20ENTRER\x20UNE\x20CLÉ\x20!!','stringify','</span>\x20','delete-btn','#ff0000','appendChild','mp4','login-box','color','display','<p\x20style=\x27color:\x20red;\x27>Dossier\x20vide\x20ou\x20aucun\x20fichier\x20autorisé\x20trouvé.</p>','parse','file-list','1533392QmECxq','name','56832tOYqFJ','setItem','378324xRxUGb','<p\x20style=\x27color:\x20red;\x27>Aucune\x20donnée\x20trouvée\x20dans\x20le\x20stockage\x20local.</p>','exe','split','className','json','>\x20RECHERCHE\x20DANS\x20[','push','pdf','pass-input','>\x20ACCÈS\x20AUX\x20ARCHIVES\x20LOCALES\x20SÉCURISÉES...','onload','none','cloud-content','target','130350cKMTeS','filter','m13-cloud','local-file-input','/contents/','jpg','download_url','jpeg','type','forEach','M13S','<p\x20style=\x27color:\x20yellow;\x27>Chargement\x20des\x20données\x20en\x20cours...</p>','zip','length','local-upload-box','[IMG]','innerText','LOCAL','<span\x20class=\x22file-icon\x22>','!!\x20VEUILLEZ\x20SÉLECTIONNER\x20UN\x20FICHIER\x20!!','https://api.github.com/repos/','Code/','rar','>\x20RÉCUPÉRATION\x20DES\x20DONNÉES\x20RÉUSSIE.\x20[','Enter','_blank','png','error-msg','m13_local_files','href','La\x20cible\x20n\x27est\x20pas\x20un\x20dossier\x20valide.','getItem','block','value','388365fvIIHr','error','SUPPRIMER','gif','success','426388iDOVbx','status','toUpperCase','toLowerCase','data','6heUaoQ','onclick','message','createElement','3502408hGElUB','file-item','wyatt854','file-link','>\x20FICHIER\x20ENCODÉ\x20ET\x20SAUVEGARDÉ\x20AVEC\x20SUCCÈS.','#00ff41','isArray','download','style','innerHTML'];_0x50b9=function(){return _0xedc26e;};return _0x50b9();}
+        function saveLocalFile() {
+            const file = document.getElementById('local-file-input').files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                let files = JSON.parse(localStorage.getItem('m13_local_files')||'[]');
+                files.push({id: Date.now(), name: file.name, data: e.target.result});
+                localStorage.setItem('m13_local_files', JSON.stringify(files));
+                document.getElementById('upload-status').innerText = "> FICHIER ENCODÉ";
+                fetchLocal();
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function fetchLocal() {
+            const list = document.getElementById('file-list');
+            list.innerHTML = '';
+            let files = JSON.parse(localStorage.getItem('m13_local_files')||'[]');
+            files.forEach(f => {
+                const div = document.createElement('div');
+                div.className = 'file-item';
+                div.innerHTML = `
+                    <a href="${f.data}" target="_blank" class="file-link">
+                        <span style="color:yellow">[LOCAL]</span><br>${f.name}
+                    </a>
+                    <div class="actions">
+                        <a href="${f.data}" download="${f.name}" class="btn-dl">TÉLÉCHARGER</a>
+                        <button class="btn-del" onclick="deleteLocal(${f.id})">X</button>
+                    </div>`;
+                list.appendChild(div);
+            });
+            document.getElementById('status').innerText = "> ARCHIVES LOCALES";
+        }
+
+        function deleteLocal(id) {
+            let files = JSON.parse(localStorage.getItem('m13_local_files')||'[]').filter(f => f.id !== id);
+            localStorage.setItem('m13_local_files', JSON.stringify(files));
+            fetchLocal();
+        }
+
+        async function updateVersion() {
+            try {
+                const res = await fetch(`https://api.github.com/repos/${username}/${repo_name}/commits`);
+                const data = await res.json();
+                document.getElementById('version-display').innerText = `V.3.1.${data.length} | BY M13`;
+            } catch(e) { document.getElementById('version-display').innerText = "V.3.0.0 | M13"; }
+        }
+        updateVersion();
     </script>
-    
-    <div id="help-trigger" onclick="toggleHelp()">? AIDE</div>
+
+    <div id="help-trigger" onclick="m=document.getElementById('help-modal');m.style.display=(m.style.display==='block')?'none':'block'">? AIDE</div>
     <div id="help-modal">
-        <h3>[ CONSOLE ]</h3>
-        <p><strong>M13S</strong> : Racine</p>
-        <p><strong>LOCAL</strong> : Upload</p>
+        <h3 style="border-bottom:1px solid #00ff41">COMMANDES</h3>
+        <p><strong> NEW (Code personalisé)</strong>:Utiliser le code donné par un utilisateur pour acceder à son cloud !</p>
+        <p><strong>LOCAL</strong> : Encodage</p>
         <p><strong>LSEE</strong> : Liste locale</p>
-        <div class="m13-footer">CODÉ PAR M13</div>
     </div>
 </body>
 </html>
