@@ -15,6 +15,7 @@
             --red: #ff2a2a;
             --yellow: #ffe033;
             --cyan: #00ccff;
+            --purple: #cc66ff;
             --bg: #000;
         }
 
@@ -29,224 +30,96 @@
         }
 
         body::before {
-            content: '';
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.07) 2px, rgba(0,0,0,0.07) 4px);
             pointer-events: none; z-index: 9997;
         }
         body::after {
-            content: '';
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.65) 100%);
             pointer-events: none; z-index: 9996;
         }
 
         .bg-grid {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: linear-gradient(rgba(0,255,65,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(0,255,65,0.025) 1px, transparent 1px);
+            background-image: linear-gradient(rgba(0,255,65,0.025) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(0,255,65,0.025) 1px, transparent 1px);
             background-size: 40px 40px;
             pointer-events: none; z-index: 0;
         }
 
-        /* ─── AUTH BUTTON top-left ─── */
-        #auth-btn-wrap {
-            position: fixed; top: 16px; left: 16px; z-index: 9995;
-        }
-
+        /* ─── AUTH BUTTON ─── */
+        #auth-btn-wrap { position: fixed; top: 16px; left: 16px; z-index: 9995; }
         #auth-btn {
-            background: transparent;
-            border: 1px solid rgba(0,255,65,0.45);
-            color: rgba(0,255,65,0.75);
-            padding: 7px 14px;
-            font-family: 'Share Tech Mono', monospace;
-            font-size: 11px; letter-spacing: 2px;
-            cursor: pointer; transition: all 0.2s;
-            text-transform: uppercase;
-            display: flex; align-items: center; gap: 8px;
+            background: transparent; border: 1px solid rgba(0,255,65,0.45);
+            color: rgba(0,255,65,0.75); padding: 7px 14px;
+            font-family: 'Share Tech Mono', monospace; font-size: 11px;
+            letter-spacing: 2px; cursor: pointer; transition: all 0.2s;
+            text-transform: uppercase; display: flex; align-items: center; gap: 8px;
         }
         #auth-btn:hover { background: var(--green); color: #000; box-shadow: 0 0 14px var(--green-glow); }
-
-        #auth-dot {
-            width: 7px; height: 7px; border-radius: 50%;
-            background: rgba(0,255,65,0.3);
-            display: inline-block; transition: background 0.3s;
-        }
+        #auth-dot { width: 7px; height: 7px; border-radius: 50%; background: rgba(0,255,65,0.3); display: inline-block; transition: background 0.3s; }
         #auth-dot.online { background: var(--green); box-shadow: 0 0 7px var(--green); animation: pulse 2s infinite; }
         @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+        #auth-avatar-img { width: 22px; height: 22px; border-radius: 3px; border: 1px solid var(--green); object-fit: cover; image-rendering: pixelated; display: none; box-shadow: 0 0 6px rgba(0,255,65,0.4); }
 
         /* ─── AUTH MODAL ─── */
         #auth-modal {
             display: none; position: fixed; top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.88);
+            width: 100%; height: 100%; background: rgba(0,0,0,0.88);
             z-index: 9994; align-items: center; justify-content: center;
         }
         #auth-modal.show { display: flex; }
 
         .auth-box {
-            border: 1px solid var(--green);
-            background: #030d03;
+            border: 1px solid var(--green); background: #030d03;
             box-shadow: 0 0 40px rgba(0,255,65,0.15);
-            padding: 36px 32px;
-            width: 100%; max-width: 380px;
-            position: relative;
-            animation: slideUp 0.25s ease;
+            padding: 36px 32px; width: 100%; max-width: 380px;
+            position: relative; animation: slideUp 0.25s ease;
         }
         @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-
-        .auth-close {
-            position: absolute; top: 12px; right: 14px;
-            background: none; border: none;
-            color: rgba(0,255,65,0.45); font-size: 18px; cursor: pointer;
-        }
+        .auth-close { position: absolute; top: 12px; right: 14px; background: none; border: none; color: rgba(0,255,65,0.45); font-size: 18px; cursor: pointer; }
         .auth-close:hover { color: var(--red); }
 
-        .auth-tabs {
-            display: flex; margin-bottom: 28px;
-            border-bottom: 1px solid rgba(0,255,65,0.2);
-        }
-        .auth-tab {
-            flex: 1; background: none; border: none;
-            color: rgba(0,255,65,0.35);
-            padding: 10px; font-family: 'Share Tech Mono', monospace;
-            font-size: 12px; letter-spacing: 2px; cursor: pointer;
-            text-transform: uppercase;
-            border-bottom: 2px solid transparent; margin-bottom: -1px;
-            transition: color 0.2s;
-        }
+        .auth-tabs { display: flex; margin-bottom: 28px; border-bottom: 1px solid rgba(0,255,65,0.2); }
+        .auth-tab { flex: 1; background: none; border: none; color: rgba(0,255,65,0.35); padding: 10px; font-family: 'Share Tech Mono', monospace; font-size: 12px; letter-spacing: 2px; cursor: pointer; text-transform: uppercase; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: color 0.2s; }
         .auth-tab.active { color: var(--green); border-bottom-color: var(--green); }
-
         .auth-form { display: none; flex-direction: column; gap: 14px; }
         .auth-form.active { display: flex; }
-
         .auth-label { font-size: 10px; letter-spacing: 2px; color: rgba(0,255,65,0.45); margin-bottom: 4px; }
-
-        .auth-input {
-            width: 100%;
-            background: rgba(0,255,65,0.04);
-            border: 1px solid rgba(0,255,65,0.3);
-            border-left: 2px solid var(--green);
-            color: var(--green);
-            padding: 10px 12px;
-            font-family: 'Share Tech Mono', monospace;
-            font-size: 14px; outline: none; transition: all 0.2s;
-        }
+        .auth-input { width: 100%; background: rgba(0,255,65,0.04); border: 1px solid rgba(0,255,65,0.3); border-left: 2px solid var(--green); color: var(--green); padding: 10px 12px; font-family: 'Share Tech Mono', monospace; font-size: 14px; outline: none; transition: all 0.2s; }
         .auth-input:focus { border-color: var(--green); background: rgba(0,255,65,0.07); box-shadow: 0 0 10px rgba(0,255,65,0.15); }
-
-        .auth-submit {
-            background: var(--green); color: #000;
-            border: none; padding: 12px;
-            font-family: 'Share Tech Mono', monospace;
-            font-size: 13px; font-weight: bold;
-            letter-spacing: 2px; text-transform: uppercase;
-            cursor: pointer; transition: all 0.2s; width: 100%;
-        }
+        .auth-submit { background: var(--green); color: #000; border: none; padding: 12px; font-family: 'Share Tech Mono', monospace; font-size: 13px; font-weight: bold; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; transition: all 0.2s; width: 100%; }
         .auth-submit:hover { background: #fff; box-shadow: 0 0 16px rgba(255,255,255,0.3); }
         .auth-submit:disabled { opacity: .5; cursor: not-allowed; }
-
-        .auth-msg {
-            font-size: 11px; letter-spacing: 1px;
-            min-height: 18px; text-align: center; padding: 6px;
-        }
+        .auth-msg { font-size: 11px; letter-spacing: 1px; min-height: 18px; text-align: center; padding: 6px; }
         .auth-msg.ok { color: var(--green); background: rgba(0,255,65,0.08); border: 1px solid rgba(0,255,65,0.2); }
         .auth-msg.err { color: var(--red); background: rgba(255,42,42,0.08); border: 1px solid rgba(255,42,42,0.2); }
 
         #user-panel { display: none; flex-direction: column; gap: 16px; text-align: center; }
         #user-panel.show { display: flex; }
 
-        .user-avatar {
-            width: 82px; height: 82px;
-            border: 2px solid var(--green);
-            border-radius: 4px;
-            margin: 0 auto 20px;
-            display: flex; align-items: center; justify-content: center;
-            font-family: 'VT323', monospace; font-size: 34px; color: var(--green);
-            background: rgba(0,255,65,0.08);
-            box-shadow: 0 0 0 1px rgba(0,255,65,0.2), 0 0 28px rgba(0,255,65,0.25);
-            overflow: hidden; position: relative;
-            image-rendering: pixelated;
-            transition: box-shadow 0.3s;
-        }
+        .user-avatar { width: 82px; height: 82px; border: 2px solid var(--green); border-radius: 4px; margin: 0 auto 0; display: flex; align-items: center; justify-content: center; font-family: 'VT323', monospace; font-size: 34px; color: var(--green); background: rgba(0,255,65,0.08); box-shadow: 0 0 0 1px rgba(0,255,65,0.2), 0 0 28px rgba(0,255,65,0.25); overflow: hidden; position: relative; image-rendering: pixelated; transition: box-shadow 0.3s; }
         .user-avatar:hover { box-shadow: 0 0 0 1px var(--green), 0 0 36px rgba(0,255,65,0.45); }
-
-        /* scanlines over avatar */
-        .user-avatar::after {
-            content: '';
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.18) 2px, rgba(0,0,0,0.18) 4px);
-            pointer-events: none; z-index: 2; transition: opacity 0.3s;
-        }
+        .user-avatar::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.18) 2px, rgba(0,0,0,0.18) 4px); pointer-events: none; z-index: 2; transition: opacity 0.3s; }
         .user-avatar:hover::after { opacity: 0; }
-
-        .user-avatar img {
-            width: 100%; height: 100%; object-fit: cover;
-            position: absolute; top: 0; left: 0;
-            image-rendering: pixelated;
-            transition: filter 0.3s; z-index: 1;
-        }
+        .user-avatar img { width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; image-rendering: pixelated; transition: filter 0.3s; z-index: 1; }
         .user-avatar img.is-gravatar { filter: sepia(0.3) saturate(1.4) hue-rotate(78deg) brightness(0.9); }
         .user-avatar img.is-gravatar:hover { filter: none; }
         .user-avatar img.is-pixel { filter: drop-shadow(0 0 3px var(--green)) brightness(1.05); }
-
-        .avatar-badge {
-            font-size: 8px; letter-spacing: 2px;
-            color: rgba(0,255,65,0.35); text-align: center;
-            margin-top: -14px; margin-bottom: 6px;
-        }
-
-        /* mini avatar bouton top-left */
-        #auth-avatar-img {
-            width: 22px; height: 22px;
-            border-radius: 3px; border: 1px solid var(--green);
-            object-fit: cover; image-rendering: pixelated;
-            display: none; box-shadow: 0 0 6px rgba(0,255,65,0.4);
-        }
-
+        .avatar-badge { font-size: 8px; letter-spacing: 2px; color: rgba(0,255,65,0.35); text-align: center; margin-top: 4px; }
         .user-email { font-size: 13px; color: rgba(0,255,65,0.7); letter-spacing: 1px; }
         .user-uid { font-size: 9px; color: rgba(0,255,65,0.25); letter-spacing: 1px; word-break: break-all; }
-
-        .sync-info-box {
-            font-size: 11px; color: rgba(0,255,65,0.45);
-            background: rgba(0,255,65,0.03);
-            border: 1px solid rgba(0,255,65,0.1);
-            padding: 10px; text-align: left; line-height: 1.9;
-        }
-
-        .btn-logout {
-            background: rgba(255,42,42,0.08);
-            border: 1px solid rgba(255,42,42,0.35);
-            color: var(--red); padding: 10px;
-            font-family: 'Share Tech Mono', monospace;
-            font-size: 12px; letter-spacing: 2px; cursor: pointer;
-            text-transform: uppercase; transition: all 0.2s;
-        }
+        .sync-info-box { font-size: 11px; color: rgba(0,255,65,0.45); background: rgba(0,255,65,0.03); border: 1px solid rgba(0,255,65,0.1); padding: 10px; text-align: left; line-height: 1.9; }
+        .btn-logout { background: rgba(255,42,42,0.08); border: 1px solid rgba(255,42,42,0.35); color: var(--red); padding: 10px; font-family: 'Share Tech Mono', monospace; font-size: 12px; letter-spacing: 2px; cursor: pointer; text-transform: uppercase; transition: all 0.2s; }
         .btn-logout:hover { background: var(--red); color: #fff; }
 
         /* ─── LAYOUT ─── */
-        .wrapper {
-            position: relative; z-index: 1;
-            display: flex; flex-direction: column;
-            align-items: center;
-            padding: 40px 20px 80px;
-            min-height: 100vh;
-        }
-
+        .wrapper { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; padding: 40px 20px 80px; min-height: 100vh; }
         .header { width: 100%; max-width: 700px; text-align: center; margin-bottom: 40px; }
-
-        .header-badge {
-            font-size: 11px; letter-spacing: 4px;
-            color: rgba(0,255,65,0.35); margin-bottom: 10px;
-            animation: blink 2s step-end infinite;
-        }
+        .header-badge { font-size: 11px; letter-spacing: 4px; color: rgba(0,255,65,0.35); margin-bottom: 10px; animation: blink 2s step-end infinite; }
         @keyframes blink { 50% { opacity: 0; } }
-
-        .glitch {
-            font-family: 'VT323', monospace;
-            font-size: clamp(36px, 8vw, 64px);
-            letter-spacing: 6px; color: var(--green);
-            text-shadow: 2px 0 var(--red), -2px 0 #00f, 0 0 30px var(--green-glow);
-            animation: glitch-anim 4s infinite; display: inline-block;
-        }
+        .glitch { font-family: 'VT323', monospace; font-size: clamp(36px, 8vw, 64px); letter-spacing: 6px; color: var(--green); text-shadow: 2px 0 var(--red), -2px 0 #00f, 0 0 30px var(--green-glow); animation: glitch-anim 4s infinite; display: inline-block; }
         @keyframes glitch-anim {
             0%,90%,100% { clip-path: none; transform: none; }
             91% { clip-path: polygon(0 0,100% 0,100% 35%,0 35%); transform: translate(-3px,-2px); color: #ff2a2a; }
@@ -255,56 +128,22 @@
             95% { clip-path: polygon(0 40%,100% 40%,100% 55%,0 55%); transform: translate(-2px,0); }
             96% { clip-path: none; transform: none; }
         }
-
         .header-line { width: 100%; height: 1px; background: linear-gradient(90deg, transparent, var(--green), transparent); margin-top: 16px; }
 
         /* ─── PANELS ─── */
-        .panel {
-            width: 100%; max-width: 440px;
-            border: 1px solid var(--green);
-            background: rgba(0,255,65,0.03);
-            box-shadow: 0 0 20px rgba(0,255,65,0.1);
-            padding: 32px;
-        }
-
+        .panel { width: 100%; max-width: 440px; border: 1px solid var(--green); background: rgba(0,255,65,0.03); box-shadow: 0 0 20px rgba(0,255,65,0.1); padding: 32px; }
         .panel-title { font-size: 11px; letter-spacing: 3px; color: rgba(0,255,65,0.45); margin-bottom: 24px; text-align: center; }
         .panel-title span { border-bottom: 1px solid rgba(0,255,65,0.25); padding-bottom: 8px; }
-
         .prompt-line { font-size: 13px; color: rgba(0,255,65,0.55); margin-bottom: 12px; letter-spacing: 1px; }
-
         .input-wrap { position: relative; margin-bottom: 20px; }
         .input-wrap::before { content: '▶'; position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--green); font-size: 12px; }
 
-        input[type="password"], input[type="text"] {
-            width: 100%; background: rgba(0,255,65,0.05);
-            border: 1px solid rgba(0,255,65,0.35); border-left: 2px solid var(--green);
-            color: var(--green); padding: 12px 12px 12px 30px;
-            font-family: 'Share Tech Mono', monospace; font-size: 15px;
-            letter-spacing: 3px; outline: none; transition: all 0.2s; text-transform: uppercase;
-        }
-        input[type="password"]:focus, input[type="text"]:focus {
-            border-color: var(--green); background: rgba(0,255,65,0.08);
-            box-shadow: 0 0 12px rgba(0,255,65,0.2);
-        }
+        input[type="password"], input[type="text"] { width: 100%; background: rgba(0,255,65,0.05); border: 1px solid rgba(0,255,65,0.35); border-left: 2px solid var(--green); color: var(--green); padding: 12px 12px 12px 30px; font-family: 'Share Tech Mono', monospace; font-size: 15px; letter-spacing: 3px; outline: none; transition: all 0.2s; text-transform: uppercase; }
+        input[type="password"]:focus, input[type="text"]:focus { border-color: var(--green); background: rgba(0,255,65,0.08); box-shadow: 0 0 12px rgba(0,255,65,0.2); }
+        input[type="file"] { color: var(--green); font-family: 'Share Tech Mono', monospace; font-size: 12px; width: 100%; margin-bottom: 20px; background: rgba(0,255,65,0.04); border: 1px dashed rgba(0,255,65,0.35); padding: 12px; cursor: pointer; }
+        input[type="file"]::-webkit-file-upload-button { background: var(--green); color: #000; border: none; padding: 6px 12px; font-family: 'Share Tech Mono', monospace; font-weight: bold; cursor: pointer; margin-right: 10px; }
 
-        input[type="file"] {
-            color: var(--green); font-family: 'Share Tech Mono', monospace; font-size: 12px;
-            width: 100%; margin-bottom: 20px;
-            background: rgba(0,255,65,0.04); border: 1px dashed rgba(0,255,65,0.35);
-            padding: 12px; cursor: pointer;
-        }
-        input[type="file"]::-webkit-file-upload-button {
-            background: var(--green); color: #000; border: none;
-            padding: 6px 12px; font-family: 'Share Tech Mono', monospace;
-            font-weight: bold; cursor: pointer; margin-right: 10px;
-        }
-
-        .btn {
-            background: transparent; border: 1px solid var(--green); color: var(--green);
-            padding: 10px 24px; font-family: 'Share Tech Mono', monospace;
-            font-size: 13px; letter-spacing: 2px; cursor: pointer;
-            text-transform: uppercase; transition: all 0.15s; position: relative; overflow: hidden;
-        }
+        .btn { background: transparent; border: 1px solid var(--green); color: var(--green); padding: 10px 24px; font-family: 'Share Tech Mono', monospace; font-size: 13px; letter-spacing: 2px; cursor: pointer; text-transform: uppercase; transition: all 0.15s; position: relative; overflow: hidden; }
         .btn::after { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: var(--green); transition: left 0.2s; z-index: -1; }
         .btn:hover { color: #000; box-shadow: 0 0 15px var(--green-glow); }
         .btn:hover::after { left: 0; }
@@ -314,109 +153,140 @@
         .btn-danger { border-color: var(--red); color: var(--red); }
         .btn-danger::after { background: var(--red); }
         .btn-danger:hover { color: #fff; }
+        .btn-cyan { border-color: var(--cyan); color: var(--cyan); }
+        .btn-cyan::after { background: var(--cyan); }
         .btn-row { display: flex; gap: 10px; }
         .btn-row .btn { flex: 1; }
 
         .error-msg { color: var(--red); font-size: 12px; letter-spacing: 2px; margin-top: 12px; min-height: 20px; text-align: center; }
         .error-msg.shake { animation: shake 0.3s; }
         @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         /* ─── CLOUD CONTENT ─── */
         #cloud-content { display: none; width: 100%; max-width: 860px; animation: fadeIn 0.4s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        .cloud-header {
-            display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 20px; padding-bottom: 14px;
-            border-bottom: 1px solid rgba(0,255,65,0.2);
-            flex-wrap: wrap; gap: 10px;
-        }
-
+        .cloud-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1px solid rgba(0,255,65,0.2); flex-wrap: wrap; gap: 10px; }
         .status-line { font-size: 12px; letter-spacing: 1px; color: rgba(0,255,65,0.65); flex: 1; }
         .status-line span { color: var(--green); }
-
-        .sync-badge {
-            font-size: 10px; letter-spacing: 1px; padding: 4px 10px;
-            border: 1px solid rgba(0,255,65,0.25); color: rgba(0,255,65,0.45);
-            display: none;
-        }
+        .sync-badge { font-size: 10px; letter-spacing: 1px; padding: 4px 10px; border: 1px solid rgba(0,255,65,0.25); color: rgba(0,255,65,0.45); display: none; }
         .sync-badge.show { display: inline-block; }
         .sync-badge.synced { border-color: var(--cyan); color: var(--cyan); box-shadow: 0 0 8px rgba(0,204,255,0.2); }
 
-        #file-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 12px;
-        }
-
-        .file-item {
-            border: 1px solid rgba(0,255,65,0.2); background: rgba(0,255,65,0.03);
-            padding: 16px; display: flex; flex-direction: column;
-            transition: all 0.2s; position: relative; overflow: hidden;
-        }
+        #file-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 12px; }
+        .file-item { border: 1px solid rgba(0,255,65,0.2); background: rgba(0,255,65,0.03); padding: 16px; display: flex; flex-direction: column; transition: all 0.2s; position: relative; overflow: hidden; }
         .file-item::before { content: ''; position: absolute; top: 0; left: 0; width: 2px; height: 0; background: var(--green); transition: height 0.2s; }
         .file-item:hover { border-color: rgba(0,255,65,0.45); background: rgba(0,255,65,0.06); box-shadow: 0 0 12px rgba(0,255,65,0.07); }
         .file-item:hover::before { height: 100%; }
-
         .file-ext-badge { display: inline-block; font-size: 9px; letter-spacing: 2px; padding: 2px 6px; border: 1px solid currentColor; margin-bottom: 8px; width: fit-content; }
-        .ext-img { color: var(--cyan); }
-        .ext-pdf { color: var(--red); }
-        .ext-txt { color: rgba(0,255,65,0.8); }
-        .ext-vid { color: var(--yellow); }
-        .ext-aud { color: #cc66ff; }
-        .ext-arc { color: #ff9900; }
-        .ext-exe { color: var(--red); }
-
-        .file-name {
-            color: #e0ffe8; font-size: 13px; flex: 1; margin-bottom: 14px;
-            word-break: break-word; line-height: 1.4;
-            text-decoration: none; display: block;
-        }
+        .ext-img { color: var(--cyan); } .ext-pdf { color: var(--red); } .ext-txt { color: rgba(0,255,65,0.8); } .ext-vid { color: var(--yellow); } .ext-aud { color: var(--purple); } .ext-arc { color: #ff9900; } .ext-exe { color: var(--red); }
+        .file-name { color: #e0ffe8; font-size: 13px; flex: 1; margin-bottom: 14px; word-break: break-word; line-height: 1.4; text-decoration: none; display: block; }
         .file-name:hover { color: var(--green); }
-
         .file-actions { display: flex; gap: 8px; padding-top: 10px; border-top: 1px solid rgba(0,255,65,0.1); }
-
-        .btn-dl {
-            flex: 1; background: rgba(0,255,65,0.08); color: var(--green);
-            border: 1px solid rgba(0,255,65,0.25); padding: 6px;
-            font-size: 10px; letter-spacing: 1px; text-align: center;
-            text-decoration: none; font-family: 'Share Tech Mono', monospace;
-            cursor: pointer; transition: all 0.15s; text-transform: uppercase;
-        }
+        .btn-dl { flex: 1; background: rgba(0,255,65,0.08); color: var(--green); border: 1px solid rgba(0,255,65,0.25); padding: 6px; font-size: 10px; letter-spacing: 1px; text-align: center; text-decoration: none; font-family: 'Share Tech Mono', monospace; cursor: pointer; transition: all 0.15s; text-transform: uppercase; }
         .btn-dl:hover { background: var(--green); color: #000; }
-
-        .btn-del {
-            background: rgba(255,42,42,0.08); color: var(--red);
-            border: 1px solid rgba(255,42,42,0.25); padding: 6px 10px;
-            font-size: 10px; cursor: pointer;
-            font-family: 'Share Tech Mono', monospace; transition: all 0.15s;
-        }
+        .btn-del { background: rgba(255,42,42,0.08); color: var(--red); border: 1px solid rgba(255,42,42,0.25); padding: 6px 10px; font-size: 10px; cursor: pointer; font-family: 'Share Tech Mono', monospace; transition: all 0.15s; }
         .btn-del:hover { background: var(--red); color: #fff; }
-
         .empty-state { grid-column: 1/-1; text-align: center; padding: 60px 20px; color: rgba(0,255,65,0.25); font-size: 13px; letter-spacing: 2px; }
         .loading { grid-column: 1/-1; text-align: center; padding: 40px; color: rgba(0,255,65,0.45); }
-
         #upload-status { margin-top: 14px; font-size: 12px; letter-spacing: 1px; color: rgba(0,255,65,0.65); min-height: 20px; }
+
+        /* ─── MCODE — DASHBOARD ─── */
+        #mcode-panel { display: none; width: 100%; max-width: 860px; animation: fadeIn 0.4s ease; }
+
+        .mcode-header { margin-bottom: 28px; padding-bottom: 14px; border-bottom: 1px solid rgba(0,255,65,0.2); }
+        .mcode-title { font-family: 'VT323', monospace; font-size: 28px; letter-spacing: 4px; color: var(--green); }
+        .mcode-subtitle { font-size: 11px; color: rgba(0,255,65,0.4); letter-spacing: 2px; margin-top: 4px; }
+
+        /* Liste des codes */
+        #codes-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; margin-bottom: 24px; }
+
+        .code-card {
+            border: 1px solid rgba(0,255,65,0.25);
+            background: rgba(0,255,65,0.03);
+            padding: 18px; cursor: pointer;
+            transition: all 0.2s; position: relative; overflow: hidden;
+        }
+        .code-card::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 0; background: var(--green); transition: height 0.25s; }
+        .code-card:hover { border-color: rgba(0,255,65,0.5); background: rgba(0,255,65,0.06); box-shadow: 0 0 16px rgba(0,255,65,0.08); }
+        .code-card:hover::before { height: 100%; }
+        .code-card-name { font-family: 'VT323', monospace; font-size: 26px; letter-spacing: 3px; color: var(--green); margin-bottom: 4px; }
+        .code-card-label { font-size: 11px; color: rgba(0,255,65,0.5); letter-spacing: 1px; margin-bottom: 10px; }
+        .code-card-meta { display: flex; gap: 12px; }
+        .code-card-stat { font-size: 10px; color: rgba(0,255,65,0.4); letter-spacing: 1px; }
+        .code-card-stat span { color: var(--green); }
+        .code-card-del { position: absolute; top: 10px; right: 10px; background: none; border: none; color: rgba(255,42,42,0.4); font-size: 14px; cursor: pointer; transition: color 0.2s; font-family: monospace; }
+        .code-card-del:hover { color: var(--red); }
+
+        .new-code-btn { border: 1px dashed rgba(0,255,65,0.3); background: transparent; color: rgba(0,255,65,0.4); padding: 18px; width: 100%; font-family: 'Share Tech Mono', monospace; font-size: 13px; letter-spacing: 3px; cursor: pointer; transition: all 0.2s; text-transform: uppercase; }
+        .new-code-btn:hover { border-color: var(--green); color: var(--green); background: rgba(0,255,65,0.04); }
+
+        /* ─── MCODE — CODE DASHBOARD (vue d'un code) ─── */
+        #code-dashboard { display: none; width: 100%; max-width: 860px; animation: fadeIn 0.4s ease; }
+
+        .code-dash-header { display: flex; align-items: center; gap: 16px; margin-bottom: 28px; padding-bottom: 14px; border-bottom: 1px solid rgba(0,255,65,0.2); flex-wrap: wrap; }
+        .code-dash-name { font-family: 'VT323', monospace; font-size: 36px; letter-spacing: 4px; color: var(--green); text-shadow: 0 0 20px rgba(0,255,65,0.4); }
+        .code-dash-label { font-size: 11px; color: rgba(0,255,65,0.4); letter-spacing: 2px; }
+        .code-dash-actions { display: flex; gap: 8px; margin-left: auto; flex-wrap: wrap; }
+
+        .code-share-box { background: rgba(0,255,65,0.04); border: 1px solid rgba(0,255,65,0.15); padding: 12px 16px; margin-bottom: 20px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+        .code-share-label { font-size: 10px; color: rgba(0,255,65,0.4); letter-spacing: 2px; }
+        .code-share-value { font-size: 14px; color: var(--cyan); letter-spacing: 3px; flex: 1; }
+        .btn-copy { background: rgba(0,204,255,0.1); border: 1px solid rgba(0,204,255,0.3); color: var(--cyan); padding: 5px 12px; font-family: 'Share Tech Mono', monospace; font-size: 10px; letter-spacing: 1px; cursor: pointer; transition: all 0.15s; text-transform: uppercase; }
+        .btn-copy:hover { background: var(--cyan); color: #000; }
+
+        #code-file-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 12px; }
+
+        /* ─── MODALS OVERLAY ─── */
+        .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.88); z-index: 9000; align-items: center; justify-content: center; }
+        .overlay.show { display: flex; }
+        .modal-box { border: 1px solid var(--green); background: #030d03; box-shadow: 0 0 40px rgba(0,255,65,0.15); padding: 32px; width: 100%; max-width: 460px; position: relative; animation: slideUp 0.25s ease; }
+        .modal-title { font-family: 'VT323', monospace; font-size: 24px; letter-spacing: 3px; color: var(--green); margin-bottom: 20px; border-bottom: 1px solid rgba(0,255,65,0.2); padding-bottom: 12px; }
+        .modal-close { position: absolute; top: 12px; right: 14px; background: none; border: none; color: rgba(0,255,65,0.45); font-size: 18px; cursor: pointer; }
+        .modal-close:hover { color: var(--red); }
+        .modal-field { margin-bottom: 16px; }
+        .modal-label { font-size: 10px; letter-spacing: 2px; color: rgba(0,255,65,0.45); margin-bottom: 6px; }
+        .modal-input { width: 100%; background: rgba(0,255,65,0.04); border: 1px solid rgba(0,255,65,0.3); border-left: 2px solid var(--green); color: var(--green); padding: 10px 12px; font-family: 'Share Tech Mono', monospace; font-size: 14px; letter-spacing: 3px; outline: none; text-transform: uppercase; transition: all 0.2s; }
+        .modal-input:focus { border-color: var(--green); background: rgba(0,255,65,0.07); box-shadow: 0 0 10px rgba(0,255,65,0.15); }
+        .modal-status { font-size: 11px; letter-spacing: 1px; min-height: 18px; padding: 6px; margin-bottom: 12px; }
+        .modal-status.ok { color: var(--green); background: rgba(0,255,65,0.08); border: 1px solid rgba(0,255,65,0.2); }
+        .modal-status.err { color: var(--red); background: rgba(255,42,42,0.08); border: 1px solid rgba(255,42,42,0.2); }
+
+        /* Import modal tabs */
+        .import-tabs { display: flex; margin-bottom: 20px; border-bottom: 1px solid rgba(0,255,65,0.2); }
+        .import-tab { flex: 1; background: none; border: none; color: rgba(0,255,65,0.35); padding: 10px; font-family: 'Share Tech Mono', monospace; font-size: 11px; letter-spacing: 2px; cursor: pointer; text-transform: uppercase; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: color 0.2s; }
+        .import-tab.active { color: var(--green); border-bottom-color: var(--green); }
+        .import-pane { display: none; }
+        .import-pane.active { display: block; }
+
+        /* Cloud files selector */
+        .cloud-file-selector { max-height: 220px; overflow-y: auto; border: 1px solid rgba(0,255,65,0.15); background: rgba(0,0,0,0.5); }
+        .cloud-file-selector::-webkit-scrollbar { width: 4px; }
+        .cloud-file-selector::-webkit-scrollbar-track { background: #000; }
+        .cloud-file-selector::-webkit-scrollbar-thumb { background: rgba(0,255,65,0.3); }
+        .cloud-file-row { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-bottom: 1px solid rgba(0,255,65,0.07); cursor: pointer; transition: background 0.15s; }
+        .cloud-file-row:hover { background: rgba(0,255,65,0.06); }
+        .cloud-file-row input[type="checkbox"] { accent-color: var(--green); width: 14px; height: 14px; cursor: pointer; }
+        .cloud-file-row-name { font-size: 12px; color: rgba(0,255,65,0.8); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; letter-spacing: 0; text-transform: none; }
+        .cloud-file-row-ext { font-size: 9px; letter-spacing: 1px; padding: 1px 5px; border: 1px solid currentColor; color: rgba(0,255,65,0.4); white-space: nowrap; }
+        .cloud-select-actions { display: flex; gap: 8px; padding: 8px 12px; border-top: 1px solid rgba(0,255,65,0.1); background: rgba(0,0,0,0.3); }
+        .btn-xs { background: rgba(0,255,65,0.08); border: 1px solid rgba(0,255,65,0.2); color: rgba(0,255,65,0.6); padding: 4px 10px; font-family: 'Share Tech Mono', monospace; font-size: 10px; letter-spacing: 1px; cursor: pointer; transition: all 0.15s; text-transform: uppercase; }
+        .btn-xs:hover { background: rgba(0,255,65,0.15); color: var(--green); }
 
         /* ─── FIXED UI ─── */
         #version-display { position: fixed; bottom: 20px; left: 20px; font-size: 10px; letter-spacing: 2px; color: rgba(0,255,65,0.3); z-index: 100; text-transform: uppercase; }
-
         #help-trigger { position: fixed; bottom: 20px; right: 20px; background: transparent; border: 1px solid rgba(0,255,65,0.35); color: rgba(0,255,65,0.55); padding: 6px 14px; font-family: 'Share Tech Mono', monospace; font-size: 11px; letter-spacing: 2px; cursor: pointer; z-index: 1000; transition: all 0.2s; }
         #help-trigger:hover { background: var(--green); color: #000; box-shadow: 0 0 12px var(--green-glow); }
-
         #help-modal { display: none; position: fixed; bottom: 60px; right: 20px; width: 310px; background: #050f05; border: 1px solid rgba(0,255,65,0.45); padding: 20px; z-index: 1000; font-size: 12px; box-shadow: 0 0 30px rgba(0,255,65,0.12); }
         #help-modal h3 { font-family: 'VT323', monospace; font-size: 20px; letter-spacing: 3px; border-bottom: 1px solid rgba(0,255,65,0.25); padding-bottom: 10px; margin-bottom: 16px; }
-
         .cmd-row { display: flex; gap: 10px; margin-bottom: 10px; align-items: flex-start; }
         .cmd-key { background: rgba(0,255,65,0.08); border: 1px solid rgba(0,255,65,0.35); color: var(--green); padding: 2px 8px; font-size: 12px; white-space: nowrap; min-width: 60px; text-align: center; }
         .cmd-desc { color: rgba(0,255,65,0.5); font-size: 11px; line-height: 1.5; }
-
         .help-footer { margin-top: 14px; padding-top: 12px; border-top: 1px solid rgba(0,255,65,0.12); font-size: 10px; color: rgba(0,255,65,0.35); letter-spacing: 1px; line-height: 1.9; }
 
         @media (max-width: 500px) {
             .wrapper { padding: 24px 14px 80px; }
             .panel { padding: 24px 18px; }
-            #file-list { grid-template-columns: 1fr; }
+            #file-list, #code-file-list, #codes-list { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -436,40 +306,24 @@
 <div id="auth-modal" onclick="if(event.target===this)closeAuthModal()">
     <div class="auth-box">
         <button class="auth-close" onclick="closeAuthModal()">✕</button>
-
         <div id="auth-forms">
             <div class="auth-tabs">
                 <button class="auth-tab active" onclick="switchTab('login')">CONNEXION</button>
                 <button class="auth-tab" onclick="switchTab('register')">INSCRIPTION</button>
             </div>
-
             <div id="form-login" class="auth-form active">
-                <div>
-                    <div class="auth-label">EMAIL</div>
-                    <input class="auth-input" type="text" id="login-email" placeholder="user@domain.com" autocomplete="username">
-                </div>
-                <div>
-                    <div class="auth-label">MOT DE PASSE</div>
-                    <input class="auth-input" type="password" id="login-pass" placeholder="••••••••" autocomplete="current-password" onkeypress="if(event.key==='Enter')doLogin()">
-                </div>
+                <div><div class="auth-label">EMAIL</div><input class="auth-input" type="text" id="login-email" placeholder="user@domain.com" autocomplete="username"></div>
+                <div><div class="auth-label">MOT DE PASSE</div><input class="auth-input" type="password" id="login-pass" placeholder="••••••••" autocomplete="current-password" onkeypress="if(event.key==='Enter')doLogin()"></div>
                 <div id="login-msg" class="auth-msg"></div>
                 <button class="auth-submit" id="login-btn" onclick="doLogin()">DÉCRYPTER &amp; ENTRER</button>
             </div>
-
             <div id="form-register" class="auth-form">
-                <div>
-                    <div class="auth-label">EMAIL</div>
-                    <input class="auth-input" type="text" id="reg-email" placeholder="user@domain.com" autocomplete="username">
-                </div>
-                <div>
-                    <div class="auth-label">MOT DE PASSE</div>
-                    <input class="auth-input" type="password" id="reg-pass" placeholder="min. 6 caractères" autocomplete="new-password" onkeypress="if(event.key==='Enter')doRegister()">
-                </div>
+                <div><div class="auth-label">EMAIL</div><input class="auth-input" type="text" id="reg-email" placeholder="user@domain.com" autocomplete="username"></div>
+                <div><div class="auth-label">MOT DE PASSE</div><input class="auth-input" type="password" id="reg-pass" placeholder="min. 6 caractères" autocomplete="new-password" onkeypress="if(event.key==='Enter')doRegister()"></div>
                 <div id="reg-msg" class="auth-msg"></div>
                 <button class="auth-submit" id="reg-btn" onclick="doRegister()">CRÉER UN COMPTE</button>
             </div>
         </div>
-
         <div id="user-panel">
             <div class="user-avatar" id="user-avatar">
                 <span id="user-avatar-letter">?</span>
@@ -478,13 +332,64 @@
             <div class="avatar-badge" id="avatar-badge"></div>
             <div class="user-email" id="user-email-display"></div>
             <div class="user-uid" id="user-uid-display"></div>
-            <div class="sync-info-box">
-                > STOCKAGE CLOUD ACTIF<br>
-                > Fichiers liés à votre compte<br>
-                > Synchronisés sur tous vos appareils
-            </div>
+            <div class="sync-info-box">> STOCKAGE CLOUD ACTIF<br>> Fichiers liés à votre compte<br>> Synchronisés sur tous vos appareils</div>
             <button class="btn-logout" onclick="doLogout()">⏻ DÉCONNEXION</button>
         </div>
+    </div>
+</div>
+
+<!-- MODAL CRÉER UN CODE -->
+<div id="modal-create-code" class="overlay" onclick="if(event.target===this)closeModal('modal-create-code')">
+    <div class="modal-box">
+        <button class="modal-close" onclick="closeModal('modal-create-code')">✕</button>
+        <div class="modal-title">// CRÉER UN CODE //</div>
+        <div class="modal-field">
+            <div class="modal-label">CODE D'ACCÈS (lettres et chiffres)</div>
+            <input class="modal-input" type="text" id="new-code-input" placeholder="EX: WYATT2024" maxlength="20">
+        </div>
+        <div class="modal-field">
+            <div class="modal-label">NOM AFFICHÉ (optionnel)</div>
+            <input class="modal-input" type="text" id="new-code-label" placeholder="MON CLOUD PERSO" style="letter-spacing:1px;text-transform:none;">
+        </div>
+        <div id="create-code-status" class="modal-status"></div>
+        <button class="btn btn-primary" onclick="createCode()">GÉNÉRER LE CODE</button>
+    </div>
+</div>
+
+<!-- MODAL IMPORTER DES FICHIERS DANS UN CODE -->
+<div id="modal-import-files" class="overlay" onclick="if(event.target===this)closeModal('modal-import-files')">
+    <div class="modal-box" style="max-width:500px">
+        <button class="modal-close" onclick="closeModal('modal-import-files')">✕</button>
+        <div class="modal-title">// AJOUTER DES FICHIERS //</div>
+        <div class="import-tabs">
+            <button class="import-tab active" onclick="switchImportTab('upload')">⬆ DEPUIS L'ORDINATEUR</button>
+            <button class="import-tab" onclick="switchImportTab('cloud')">☁ DEPUIS MON CLOUD</button>
+        </div>
+
+        <!-- Onglet upload local -->
+        <div id="import-pane-upload" class="import-pane active">
+            <div class="modal-label" style="margin-bottom:10px;">SÉLECTIONNER UN OU PLUSIEURS FICHIERS :</div>
+            <input type="file" id="import-file-input" multiple>
+            <div id="import-upload-list" style="font-size:11px;color:rgba(0,255,65,0.5);margin-bottom:14px;min-height:16px;"></div>
+            <button class="btn btn-primary" onclick="importFromUpload()">ENCODER &amp; AJOUTER</button>
+        </div>
+
+        <!-- Onglet cloud perso -->
+        <div id="import-pane-cloud" class="import-pane">
+            <div class="modal-label" style="margin-bottom:10px;">SÉLECTIONNER DEPUIS MON CLOUD :</div>
+            <div class="cloud-file-selector" id="cloud-file-selector">
+                <div style="padding:20px;text-align:center;color:rgba(0,255,65,0.3);font-size:12px;">CHARGEMENT...</div>
+            </div>
+            <div class="cloud-select-actions">
+                <button class="btn-xs" onclick="toggleSelectAll()">TOUT COCHER</button>
+                <span id="selected-count" style="font-size:10px;color:rgba(0,255,65,0.4);letter-spacing:1px;align-self:center;">0 SÉLECTIONNÉ(S)</span>
+            </div>
+            <div style="margin-top:12px;">
+                <button class="btn btn-primary" onclick="importFromCloud()">IMPORTER LA SÉLECTION</button>
+            </div>
+        </div>
+
+        <div id="import-status" class="modal-status" style="margin-top:12px;"></div>
     </div>
 </div>
 
@@ -496,17 +401,18 @@
         <div class="header-line"></div>
     </div>
 
+    <!-- LOGIN BOX -->
     <div id="login-box" class="panel">
         <div class="panel-title"><span>AUTHENTIFICATION REQUISE</span></div>
         <div class="prompt-line">> ENTRER CLÉ D'ACCÈS :</div>
         <div class="input-wrap">
-            <input type="password" id="pass-input" placeholder="CODE / DOSSIER"
-                onkeypress="if(event.key==='Enter')verifyAccess()" autocomplete="off">
+            <input type="password" id="pass-input" placeholder="CODE / DOSSIER" onkeypress="if(event.key==='Enter')verifyAccess()" autocomplete="off">
         </div>
         <button class="btn btn-primary" onclick="verifyAccess()">DÉCRYPTER &amp; ACCÉDER</button>
         <div id="error-msg" class="error-msg"></div>
     </div>
 
+    <!-- LOCAL UPLOAD -->
     <div id="local-upload-box" class="panel" style="display:none;">
         <div class="panel-title"><span>ENCODEUR</span></div>
         <div class="prompt-line" id="upload-mode-label">> SÉLECTIONNER UN FICHIER :</div>
@@ -518,6 +424,7 @@
         <div id="upload-status"></div>
     </div>
 
+    <!-- CLOUD CONTENT (GitHub / LSEE) -->
     <div id="cloud-content">
         <div class="cloud-header">
             <div class="status-line" id="status">> INITIALISATION</div>
@@ -526,6 +433,42 @@
         </div>
         <div id="file-list"></div>
     </div>
+
+    <!-- MCODE PANEL (liste de mes codes) -->
+    <div id="mcode-panel">
+        <div class="mcode-header">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px;">
+                <div>
+                    <div class="mcode-title">// MES CODES PARTAGÉS //</div>
+                    <div class="mcode-subtitle">Codes d'accès à partager avec d'autres utilisateurs</div>
+                </div>
+                <button class="btn btn-danger" onclick="location.reload()">[X] FERMER</button>
+            </div>
+        </div>
+        <div id="codes-list"></div>
+        <button class="new-code-btn" onclick="openModal('modal-create-code')">+ CRÉER UN NOUVEAU CODE</button>
+    </div>
+
+    <!-- CODE DASHBOARD (vue d'un code précis) -->
+    <div id="code-dashboard">
+        <div class="code-dash-header">
+            <div>
+                <div class="code-dash-name" id="dash-code-name">—</div>
+                <div class="code-dash-label" id="dash-code-label">—</div>
+            </div>
+            <div class="code-dash-actions">
+                <button class="btn btn-cyan" onclick="openImportModal()">+ AJOUTER DES FICHIERS</button>
+                <button class="btn" onclick="backToMyCodes()">← MES CODES</button>
+                <button class="btn btn-danger" onclick="location.reload()">[X]</button>
+            </div>
+        </div>
+        <div class="code-share-box">
+            <div class="code-share-label">CODE À PARTAGER :</div>
+            <div class="code-share-value" id="dash-code-share">—</div>
+            <button class="btn-copy" onclick="copyCode()">📋 COPIER</button>
+        </div>
+        <div id="code-file-list"></div>
+    </div>
 </div>
 
 <!-- FIXED UI -->
@@ -533,9 +476,9 @@
 <button id="help-trigger" onclick="toggleHelp()">? AIDE</button>
 <div id="help-modal">
     <h3>COMMANDES</h3>
-    <div class="cmd-row"><div class="cmd-key">M13S</div><div class="cmd-desc">Racine du dépôt GitHub</div></div>
-    <div class="cmd-row"><div class="cmd-key">[CODE]</div><div class="cmd-desc">Sous-dossier <span style="color:var(--green)">/Code/[CODE]</span></div></div>
-    <div class="cmd-row"><div class="cmd-key">LOCAL</div><div class="cmd-desc">Encoder un fichier (cloud si connecté, sinon navigateur)</div></div>
+    <div class="cmd-row"><div class="cmd-key">M13S</div><div class="cmd-desc">Accès racine du dépôt GitHub</div></div>
+    <div class="cmd-row"><div class="cmd-key">[CODE]</div><div class="cmd-desc">Sous-dossier <span style="color:var(--green)">/Code/[CODE]</span> sur GitHub</div></div>
+    <div class="cmd-row"><div class="cmd-key">LOCAL</div><div class="cmd-desc">Encoder un fichier (cloud si connecté)</div></div>
     <div class="cmd-row"><div class="cmd-key">LSEE</div><div class="cmd-desc">Voir mes fichiers (cloud ou locaux)</div></div>
     <div class="help-footer">
         🔒 CONNECTÉ → Supabase (multi-appareils)<br>
@@ -552,14 +495,15 @@
     const GH_USER = 'wyatt854';
     const GH_REPO = 'm13-cloud';
     const ALLOWED_EXT = ['jpg','jpeg','png','gif','pdf','txt','mp4','mp3','zip','rar','exe'];
-
     const EXT_CAT = { img:['jpg','jpeg','png','gif'], pdf:['pdf'], txt:['txt'], vid:['mp4'], aud:['mp3'], arc:['zip','rar'], exe:['exe'] };
     const getExtClass = ext => { for(const[c,e] of Object.entries(EXT_CAT)) if(e.includes(ext)) return 'ext-'+c; return ''; };
 
     let currentUser = null;
     let currentMode = null;
+    let activCodeId = null;   // code actuellement ouvert dans le dashboard
+    let activCodeName = '';
 
-    // ── MD5 (pour Gravatar) ──
+    // ── MD5 ──
     function md5(str) {
         function safeAdd(x,y){let lsw=(x&0xFFFF)+(y&0xFFFF);return(((x>>16)+(y>>16)+(lsw>>16))<<16)|(lsw&0xFFFF)}
         function bitRotateLeft(num,cnt){return(num<<cnt)|(num>>>(32-cnt))}
@@ -576,42 +520,29 @@
         let a=1732584193,b=-271733879,c=-1732584194,d=271733878;
         for(i=0;i<len;i+=16){
             let [aa,bb,cc,dd]=[a,b,c,d];
-            a=md5ff(a,b,c,d,m[i],7,-680876936); d=md5ff(d,a,b,c,m[i+1],12,-389564586); c=md5ff(c,d,a,b,m[i+2],17,606105819); b=md5ff(b,c,d,a,m[i+3],22,-1044525330);
-            a=md5ff(a,b,c,d,m[i+4],7,-176418897); d=md5ff(d,a,b,c,m[i+5],12,1200080426); c=md5ff(c,d,a,b,m[i+6],17,-1473231341); b=md5ff(b,c,d,a,m[i+7],22,-45705983);
-            a=md5ff(a,b,c,d,m[i+8],7,1770035416); d=md5ff(d,a,b,c,m[i+9],12,-1958414417); c=md5ff(c,d,a,b,m[i+10],17,-42063); b=md5ff(b,c,d,a,m[i+11],22,-1990404162);
-            a=md5ff(a,b,c,d,m[i+12],7,1804603682); d=md5ff(d,a,b,c,m[i+13],12,-40341101); c=md5ff(c,d,a,b,m[i+14],17,-1502002290); b=md5ff(b,c,d,a,m[i+15],22,1236535329);
-            a=md5gg(a,b,c,d,m[i+1],5,-165796510); d=md5gg(d,a,b,c,m[i+6],9,-1069501632); c=md5gg(c,d,a,b,m[i+11],14,643717713); b=md5gg(b,c,d,a,m[i],20,-373897302);
-            a=md5gg(a,b,c,d,m[i+5],5,-701558691); d=md5gg(d,a,b,c,m[i+10],9,38016083); c=md5gg(c,d,a,b,m[i+15],14,-660478335); b=md5gg(b,c,d,a,m[i+4],20,-405537848);
-            a=md5gg(a,b,c,d,m[i+9],5,568446438); d=md5gg(d,a,b,c,m[i+14],9,-1019803690); c=md5gg(c,d,a,b,m[i+3],14,-187363961); b=md5gg(b,c,d,a,m[i+8],20,1163531501);
-            a=md5gg(a,b,c,d,m[i+13],5,-1444681467); d=md5gg(d,a,b,c,m[i+2],9,-51403784); c=md5gg(c,d,a,b,m[i+7],14,1735328473); b=md5gg(b,c,d,a,m[i+12],20,-1926607734);
-            a=md5hh(a,b,c,d,m[i+5],4,-378558); d=md5hh(d,a,b,c,m[i+8],11,-2022574463); c=md5hh(c,d,a,b,m[i+11],16,1839030562); b=md5hh(b,c,d,a,m[i+14],23,-35309556);
-            a=md5hh(a,b,c,d,m[i+1],4,-1530992060); d=md5hh(d,a,b,c,m[i+4],11,1272893353); c=md5hh(c,d,a,b,m[i+7],16,-155497632); b=md5hh(b,c,d,a,m[i+10],23,-1094730640);
-            a=md5hh(a,b,c,d,m[i+13],4,681279174); d=md5hh(d,a,b,c,m[i],11,-358537222); c=md5hh(c,d,a,b,m[i+3],16,-722521979); b=md5hh(b,c,d,a,m[i+6],23,76029189);
-            a=md5hh(a,b,c,d,m[i+9],4,-640364487); d=md5hh(d,a,b,c,m[i+12],11,-421815835); c=md5hh(c,d,a,b,m[i+15],16,530742520); b=md5hh(b,c,d,a,m[i+2],23,-995338651);
-            a=md5ii(a,b,c,d,m[i],6,-198630844); d=md5ii(d,a,b,c,m[i+7],10,1126891415); c=md5ii(c,d,a,b,m[i+14],15,-1416354905); b=md5ii(b,c,d,a,m[i+5],21,-57434055);
-            a=md5ii(a,b,c,d,m[i+12],6,1700485571); d=md5ii(d,a,b,c,m[i+3],10,-1894986606); c=md5ii(c,d,a,b,m[i+10],15,-1051523); b=md5ii(b,c,d,a,m[i+1],21,-2054922799);
-            a=md5ii(a,b,c,d,m[i+8],6,1873313359); d=md5ii(d,a,b,c,m[i+15],10,-30611744); c=md5ii(c,d,a,b,m[i+6],15,-1560198380); b=md5ii(b,c,d,a,m[i+13],21,1309151649);
-            a=md5ii(a,b,c,d,m[i+4],6,-145523070); d=md5ii(d,a,b,c,m[i+11],10,-1120210379); c=md5ii(c,d,a,b,m[i+2],15,718787259); b=md5ii(b,c,d,a,m[i+9],21,-343485551);
-            a=safeAdd(a,aa); b=safeAdd(b,bb); c=safeAdd(c,cc); d=safeAdd(d,dd);
+            a=md5ff(a,b,c,d,m[i],7,-680876936);d=md5ff(d,a,b,c,m[i+1],12,-389564586);c=md5ff(c,d,a,b,m[i+2],17,606105819);b=md5ff(b,c,d,a,m[i+3],22,-1044525330);
+            a=md5ff(a,b,c,d,m[i+4],7,-176418897);d=md5ff(d,a,b,c,m[i+5],12,1200080426);c=md5ff(c,d,a,b,m[i+6],17,-1473231341);b=md5ff(b,c,d,a,m[i+7],22,-45705983);
+            a=md5ff(a,b,c,d,m[i+8],7,1770035416);d=md5ff(d,a,b,c,m[i+9],12,-1958414417);c=md5ff(c,d,a,b,m[i+10],17,-42063);b=md5ff(b,c,d,a,m[i+11],22,-1990404162);
+            a=md5ff(a,b,c,d,m[i+12],7,1804603682);d=md5ff(d,a,b,c,m[i+13],12,-40341101);c=md5ff(c,d,a,b,m[i+14],17,-1502002290);b=md5ff(b,c,d,a,m[i+15],22,1236535329);
+            a=md5gg(a,b,c,d,m[i+1],5,-165796510);d=md5gg(d,a,b,c,m[i+6],9,-1069501632);c=md5gg(c,d,a,b,m[i+11],14,643717713);b=md5gg(b,c,d,a,m[i],20,-373897302);
+            a=md5gg(a,b,c,d,m[i+5],5,-701558691);d=md5gg(d,a,b,c,m[i+10],9,38016083);c=md5gg(c,d,a,b,m[i+15],14,-660478335);b=md5gg(b,c,d,a,m[i+4],20,-405537848);
+            a=md5gg(a,b,c,d,m[i+9],5,568446438);d=md5gg(d,a,b,c,m[i+14],9,-1019803690);c=md5gg(c,d,a,b,m[i+3],14,-187363961);b=md5gg(b,c,d,a,m[i+8],20,1163531501);
+            a=md5gg(a,b,c,d,m[i+13],5,-1444681467);d=md5gg(d,a,b,c,m[i+2],9,-51403784);c=md5gg(c,d,a,b,m[i+7],14,1735328473);b=md5gg(b,c,d,a,m[i+12],20,-1926607734);
+            a=md5hh(a,b,c,d,m[i+5],4,-378558);d=md5hh(d,a,b,c,m[i+8],11,-2022574463);c=md5hh(c,d,a,b,m[i+11],16,1839030562);b=md5hh(b,c,d,a,m[i+14],23,-35309556);
+            a=md5hh(a,b,c,d,m[i+1],4,-1530992060);d=md5hh(d,a,b,c,m[i+4],11,1272893353);c=md5hh(c,d,a,b,m[i+7],16,-155497632);b=md5hh(b,c,d,a,m[i+10],23,-1094730640);
+            a=md5hh(a,b,c,d,m[i+13],4,681279174);d=md5hh(d,a,b,c,m[i],11,-358537222);c=md5hh(c,d,a,b,m[i+3],16,-722521979);b=md5hh(b,c,d,a,m[i+6],23,76029189);
+            a=md5hh(a,b,c,d,m[i+9],4,-640364487);d=md5hh(d,a,b,c,m[i+12],11,-421815835);c=md5hh(c,d,a,b,m[i+15],16,530742520);b=md5hh(b,c,d,a,m[i+2],23,-995338651);
+            a=md5ii(a,b,c,d,m[i],6,-198630844);d=md5ii(d,a,b,c,m[i+7],10,1126891415);c=md5ii(c,d,a,b,m[i+14],15,-1416354905);b=md5ii(b,c,d,a,m[i+5],21,-57434055);
+            a=md5ii(a,b,c,d,m[i+12],6,1700485571);d=md5ii(d,a,b,c,m[i+3],10,-1894986606);c=md5ii(c,d,a,b,m[i+10],15,-1051523);b=md5ii(b,c,d,a,m[i+1],21,-2054922799);
+            a=md5ii(a,b,c,d,m[i+8],6,1873313359);d=md5ii(d,a,b,c,m[i+15],10,-30611744);c=md5ii(c,d,a,b,m[i+6],15,-1560198380);b=md5ii(b,c,d,a,m[i+13],21,1309151649);
+            a=md5ii(a,b,c,d,m[i+4],6,-145523070);d=md5ii(d,a,b,c,m[i+11],10,-1120210379);c=md5ii(c,d,a,b,m[i+2],15,718787259);b=md5ii(b,c,d,a,m[i+9],21,-343485551);
+            a=safeAdd(a,aa);b=safeAdd(b,bb);c=safeAdd(c,cc);d=safeAdd(d,dd);
         }
         return [a,b,c,d].map(n=>('0'+((n&0xFF).toString(16))).slice(-2)+('0'+(((n>>8)&0xFF).toString(16))).slice(-2)+('0'+(((n>>16)&0xFF).toString(16))).slice(-2)+('0'+(((n>>24)&0xFF).toString(16))).slice(-2)).join('');
     }
 
-    function gravatarUrl(email, size = 80) {
-        const hash = md5(email.trim().toLowerCase());
-        return `https://www.gravatar.com/avatar/${hash}?s=${size}&d=404`;
-    }
-
-    function dicebearUrl(email) {
-        // pixel-art style — seed = email hash, couleurs matrix
-        const seed = md5(email.trim().toLowerCase());
-        const params = new URLSearchParams({
-            seed,
-            backgroundColor: '0a0a0a',
-            pixelSize: '4',
-        });
-        return `https://api.dicebear.com/8.x/pixel-art/svg?${params}`;
-    }
+    function gravatarUrl(email, size=80) { return `https://www.gravatar.com/avatar/${md5(email.trim().toLowerCase())}?s=${size}&d=404`; }
+    function dicebearUrl(email) { return `https://api.dicebear.com/8.x/pixel-art/svg?seed=${md5(email.trim().toLowerCase())}&backgroundColor=0a0a0a&pixelSize=4`; }
 
     async function loadAvatar(email) {
         const img = document.getElementById('user-gravatar');
@@ -619,41 +550,17 @@
         const miniImg = document.getElementById('auth-avatar-img');
         const badge = document.getElementById('avatar-badge');
         const dot = document.getElementById('auth-dot');
-
-        // Étape 1 — tenter Gravatar
-        const gUrl = gravatarUrl(email, 160);
         let gravatarFound = false;
-
-        try {
-            const res = await fetch(gUrl, { method: 'HEAD', mode: 'cors' });
-            gravatarFound = res.ok;
-        } catch(e) { gravatarFound = false; }
-
+        try { const res = await fetch(gravatarUrl(email,160), { method:'HEAD', mode:'cors' }); gravatarFound = res.ok; } catch(e) {}
         if (gravatarFound) {
-            // ✅ Gravatar trouvé → photo réelle avec filtre matrix
-            img.src = gUrl;
-            img.className = 'is-gravatar';
-            img.style.display = 'block';
-            letter.style.display = 'none';
-            miniImg.src = gravatarUrl(email, 40);
-            miniImg.style.filter = 'sepia(0.3) saturate(1.4) hue-rotate(78deg)';
-            miniImg.style.display = 'inline-block';
-            dot.style.display = 'none';
-            badge.textContent = '// GRAVATAR //';
-            badge.style.color = 'rgba(0,204,255,0.5)';
+            img.src = gravatarUrl(email,160); img.className='is-gravatar'; img.style.display='block'; letter.style.display='none';
+            miniImg.src = gravatarUrl(email,40); miniImg.style.filter='sepia(0.3) saturate(1.4) hue-rotate(78deg)'; miniImg.style.display='inline-block'; dot.style.display='none';
+            badge.textContent='// GRAVATAR //'; badge.style.color='rgba(0,204,255,0.5)';
         } else {
-            // ❌ Pas de Gravatar → DiceBear pixel-art unique
             const dUrl = dicebearUrl(email);
-            img.src = dUrl;
-            img.className = 'is-pixel';
-            img.style.display = 'block';
-            letter.style.display = 'none';
-            miniImg.src = dUrl;
-            miniImg.style.filter = 'none';
-            miniImg.style.display = 'inline-block';
-            dot.style.display = 'none';
-            badge.textContent = '// PIXEL.ART //';
-            badge.style.color = 'rgba(0,255,65,0.35)';
+            img.src = dUrl; img.className='is-pixel'; img.style.display='block'; letter.style.display='none';
+            miniImg.src = dUrl; miniImg.style.filter='none'; miniImg.style.display='inline-block'; dot.style.display='none';
+            badge.textContent='// PIXEL.ART //'; badge.style.color='rgba(0,255,65,0.35)';
         }
     }
 
@@ -661,12 +568,8 @@
     sb.auth.onAuthStateChange((event, session) => {
         currentUser = session?.user || null;
         updateAuthUI();
-        if (currentMode === 'local' && document.getElementById('cloud-content').style.display === 'block') {
-            fetchLocal();
-        }
-        if (document.getElementById('local-upload-box').style.display === 'block') {
-            updateUploadLabel();
-        }
+        if (currentMode === 'local' && document.getElementById('cloud-content').style.display === 'block') fetchLocal();
+        if (document.getElementById('local-upload-box').style.display === 'block') updateUploadLabel();
     });
 
     function updateAuthUI() {
@@ -674,81 +577,65 @@
         const label = document.getElementById('auth-label');
         const formsEl = document.getElementById('auth-forms');
         const panelEl = document.getElementById('user-panel');
-
         if (currentUser) {
             dot.className = 'online';
-            const short = currentUser.email.split('@')[0].toUpperCase().substring(0, 10);
+            const short = currentUser.email.split('@')[0].toUpperCase().substring(0,10);
             label.textContent = short;
-            formsEl.style.display = 'none';
-            panelEl.classList.add('show');
-            document.getElementById('user-avatar-letter').textContent = short[0] || '?';
+            formsEl.style.display = 'none'; panelEl.classList.add('show');
+            document.getElementById('user-avatar-letter').textContent = short[0]||'?';
             document.getElementById('user-gravatar').style.display = 'none';
             document.getElementById('auth-avatar-img').style.display = 'none';
             document.getElementById('auth-dot').style.display = 'inline-block';
             document.getElementById('user-email-display').textContent = currentUser.email;
-            document.getElementById('user-uid-display').textContent = 'UID: ' + currentUser.id;
+            document.getElementById('user-uid-display').textContent = 'UID: '+currentUser.id;
             loadAvatar(currentUser.email);
         } else {
-            dot.className = '';
-            dot.style.display = 'inline-block';
-            label.textContent = 'CONNEXION';
-            formsEl.style.display = 'block';
-            panelEl.classList.remove('show');
-            document.getElementById('auth-avatar-img').style.display = 'none';
-            document.getElementById('avatar-badge').textContent = '';
+            dot.className=''; dot.style.display='inline-block'; label.textContent='CONNEXION';
+            formsEl.style.display='block'; panelEl.classList.remove('show');
+            document.getElementById('auth-avatar-img').style.display='none';
+            document.getElementById('avatar-badge').textContent='';
         }
     }
 
     function updateUploadLabel() {
         const lbl = document.getElementById('upload-mode-label');
-        if (currentUser) {
-            lbl.innerHTML = '> FICHIER → <span style="color:var(--cyan)">CLOUD SUPABASE</span> :';
-        } else {
-            lbl.innerHTML = '> FICHIER → <span style="color:var(--yellow)">STOCKAGE LOCAL</span> :';
-        }
+        lbl.innerHTML = currentUser ? '> FICHIER → <span style="color:var(--cyan)">CLOUD SUPABASE</span> :' : '> FICHIER → <span style="color:var(--yellow)">STOCKAGE LOCAL</span> :';
     }
 
     // ── AUTH MODAL ──
     function openAuthModal() { document.getElementById('auth-modal').classList.add('show'); }
     function closeAuthModal() { document.getElementById('auth-modal').classList.remove('show'); }
-
     function switchTab(tab) {
-        document.querySelectorAll('.auth-tab').forEach((t,i) =>
-            t.classList.toggle('active', (tab==='login'&&i===0)||(tab==='register'&&i===1)));
+        document.querySelectorAll('.auth-tab').forEach((t,i) => t.classList.toggle('active', (tab==='login'&&i===0)||(tab==='register'&&i===1)));
         document.getElementById('form-login').classList.toggle('active', tab==='login');
         document.getElementById('form-register').classList.toggle('active', tab==='register');
     }
 
     async function doLogin() {
-        const email = document.getElementById('login-email').value.trim();
-        const pass = document.getElementById('login-pass').value;
-        const msg = document.getElementById('login-msg');
-        const btn = document.getElementById('login-btn');
-        msg.className = 'auth-msg'; msg.textContent = '';
-        btn.disabled = true; btn.textContent = 'AUTHENTIFICATION...';
-        const { error } = await sb.auth.signInWithPassword({ email, password: pass });
-        btn.disabled = false; btn.textContent = 'DÉCRYPTER & ENTRER';
-        if (error) { msg.className = 'auth-msg err'; msg.textContent = '!! ' + (error.message||'ERREUR AUTH') + ' !!'; }
-        else { msg.className = 'auth-msg ok'; msg.textContent = '> ACCÈS ACCORDÉ ✓'; setTimeout(closeAuthModal, 700); }
+        const email=document.getElementById('login-email').value.trim(), pass=document.getElementById('login-pass').value;
+        const msg=document.getElementById('login-msg'), btn=document.getElementById('login-btn');
+        msg.className='auth-msg'; msg.textContent=''; btn.disabled=true; btn.textContent='AUTHENTIFICATION...';
+        const {error} = await sb.auth.signInWithPassword({email, password:pass});
+        btn.disabled=false; btn.textContent='DÉCRYPTER & ENTRER';
+        if (error) { msg.className='auth-msg err'; msg.textContent='!! '+(error.message||'ERREUR AUTH')+' !!'; }
+        else { msg.className='auth-msg ok'; msg.textContent='> ACCÈS ACCORDÉ ✓'; setTimeout(closeAuthModal,700); }
     }
 
     async function doRegister() {
-        const email = document.getElementById('reg-email').value.trim();
-        const pass = document.getElementById('reg-pass').value;
-        const msg = document.getElementById('reg-msg');
-        const btn = document.getElementById('reg-btn');
-        msg.className = 'auth-msg'; msg.textContent = '';
-        btn.disabled = true; btn.textContent = 'ENCODAGE...';
-        const { error } = await sb.auth.signUp({ email, password: pass });
-        btn.disabled = false; btn.textContent = 'CRÉER UN COMPTE';
-        if (error) { msg.className = 'auth-msg err'; msg.textContent = '!! ' + (error.message||'ERREUR') + ' !!'; }
-        else { msg.className = 'auth-msg ok'; msg.textContent = '> COMPTE CRÉÉ — VÉRIFIER EMAIL'; }
+        const email=document.getElementById('reg-email').value.trim(), pass=document.getElementById('reg-pass').value;
+        const msg=document.getElementById('reg-msg'), btn=document.getElementById('reg-btn');
+        msg.className='auth-msg'; msg.textContent=''; btn.disabled=true; btn.textContent='ENCODAGE...';
+        const {error} = await sb.auth.signUp({email, password:pass});
+        btn.disabled=false; btn.textContent='CRÉER UN COMPTE';
+        if (error) { msg.className='auth-msg err'; msg.textContent='!! '+(error.message||'ERREUR')+' !!'; }
+        else { msg.className='auth-msg ok'; msg.textContent='> COMPTE CRÉÉ — VÉRIFIER EMAIL'; }
     }
 
-    async function doLogout() {
-        await sb.auth.signOut();
-        closeAuthModal();
-    }
+    async function doLogout() { await sb.auth.signOut(); closeAuthModal(); }
+
+    // ── MODAL UTILS ──
+    function openModal(id) { document.getElementById(id).classList.add('show'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('show'); }
 
     // ── MAIN ACCESS ──
     function verifyAccess() {
@@ -756,179 +643,332 @@
         const err = document.getElementById('error-msg');
         err.textContent = '';
 
-        if (val === 'M13S') { currentMode = 'github'; showCloud(); fetchGitHub(''); }
-        else if (val === 'LOCAL') {
-            document.getElementById('login-box').style.display = 'none';
-            document.getElementById('local-upload-box').style.display = 'block';
-            updateUploadLabel();
+        if (val === 'M13S') { currentMode='github'; showCloud(); fetchGitHub(''); }
+        else if (val === 'MCODE') {
+            if (!currentUser) { err.textContent='!! CONNEXION REQUISE POUR MCODE !!'; err.classList.remove('shake'); void err.offsetWidth; err.classList.add('shake'); return; }
+            showPanel('mcode-panel'); loadMyCodes();
         }
-        else if (val === 'LSEE') { currentMode = 'local'; showCloud(); fetchLocal(); }
-        else if (val !== '') { currentMode = 'github'; showCloud(); fetchGitHub('Code/' + val); }
-        else {
-            err.textContent = '!! ACCÈS REFUSÉ — CLÉ INVALIDE !!';
-            err.classList.remove('shake'); void err.offsetWidth; err.classList.add('shake');
+        else if (val === 'LOCAL') { document.getElementById('login-box').style.display='none'; document.getElementById('local-upload-box').style.display='block'; updateUploadLabel(); }
+        else if (val === 'LSEE') { currentMode='local'; showCloud(); fetchLocal(); }
+        else if (val !== '') {
+            // Tenter comme code partagé Supabase d'abord, sinon GitHub
+            currentMode = 'shared-code';
+            showCloud();
+            fetchSharedCode(val);
         }
+        else { err.textContent='!! ACCÈS REFUSÉ — CLÉ INVALIDE !!'; err.classList.remove('shake'); void err.offsetWidth; err.classList.add('shake'); }
     }
 
     function showCloud() {
-        document.getElementById('login-box').style.display = 'none';
-        document.getElementById('cloud-content').style.display = 'block';
+        document.getElementById('login-box').style.display='none';
+        document.getElementById('cloud-content').style.display='block';
+    }
+
+    function showPanel(id) {
+        ['login-box','cloud-content','local-upload-box','mcode-panel','code-dashboard'].forEach(p => {
+            const el = document.getElementById(p);
+            if (el) el.style.display = 'none';
+        });
+        document.getElementById(id).style.display = 'block';
     }
 
     // ── GITHUB ──
     async function fetchGitHub(path) {
-        const list = document.getElementById('file-list');
-        const status = document.getElementById('status');
-        status.innerHTML = `> SECTEUR : <span>${path || 'ROOT'}</span>`;
-        list.innerHTML = '<div class="loading">> CHARGEMENT EN COURS...</div>';
-        document.getElementById('sync-badge').className = 'sync-badge';
+        const list=document.getElementById('file-list'), status=document.getElementById('status');
+        status.innerHTML=`> SECTEUR : <span>${path||'ROOT'}</span>`;
+        list.innerHTML='<div class="loading">> CHARGEMENT EN COURS...</div>';
+        document.getElementById('sync-badge').className='sync-badge';
         try {
-            const res = await fetch(`https://api.github.com/repos/${GH_USER}/${GH_REPO}/contents/${path}`);
-            const data = await res.json();
-            list.innerHTML = '';
+            const res=await fetch(`https://api.github.com/repos/${GH_USER}/${GH_REPO}/contents/${path}`);
+            const data=await res.json(); list.innerHTML='';
             if (!Array.isArray(data)) throw new Error('Dossier introuvable');
-            const files = data.filter(f => ALLOWED_EXT.includes(f.name.split('.').pop().toLowerCase()));
-            if (!files.length) { list.innerHTML = '<div class="empty-state">// SECTEUR VIDE — AUCUN FICHIER //</div>'; return; }
-            status.innerHTML = `> SECTEUR <span>${path||'ROOT'}</span> — <span>${files.length}</span> FICHIER(S)`;
+            const files=data.filter(f=>ALLOWED_EXT.includes(f.name.split('.').pop().toLowerCase()));
+            if (!files.length) { list.innerHTML='<div class="empty-state">// SECTEUR VIDE — AUCUN FICHIER //</div>'; return; }
+            status.innerHTML=`> SECTEUR <span>${path||'ROOT'}</span> — <span>${files.length}</span> FICHIER(S)`;
             files.forEach(file => {
-                const ext = file.name.split('.').pop().toLowerCase();
-                const div = document.createElement('div');
-                div.className = 'file-item';
-                div.innerHTML = `
-                    <div class="file-ext-badge ${getExtClass(ext)}">${ext.toUpperCase()}</div>
-                    <a href="${file.download_url}" target="_blank" class="file-name">${file.name}</a>
-                    <div class="file-actions">
-                        <a href="${file.download_url}" download="${file.name}" class="btn-dl">⬇ TÉLÉCHARGER</a>
-                    </div>`;
+                const ext=file.name.split('.').pop().toLowerCase();
+                const div=document.createElement('div'); div.className='file-item';
+                div.innerHTML=`<div class="file-ext-badge ${getExtClass(ext)}">${ext.toUpperCase()}</div><a href="${file.download_url}" target="_blank" class="file-name">${file.name}</a><div class="file-actions"><a href="${file.download_url}" download="${file.name}" class="btn-dl">⬇ TÉLÉCHARGER</a></div>`;
                 list.appendChild(div);
             });
-        } catch(e) {
-            list.innerHTML = '';
-            status.innerHTML = `<span style="color:var(--red)">!! ERREUR — ${e.message} !!</span>`;
-        }
+        } catch(e) { list.innerHTML=''; status.innerHTML=`<span style="color:var(--red)">!! ERREUR — ${e.message} !!</span>`; }
     }
 
-    // ── LOCAL / CLOUD UPLOAD ──
-    function saveLocalFile() {
-        const file = document.getElementById('local-file-input').files[0];
-        const statusEl = document.getElementById('upload-status');
-        if (!file) { statusEl.textContent = '!! SÉLECTIONNER UN FICHIER D\'ABORD'; return; }
+    // ── SHARED CODE (lecture publique) ──
+    async function fetchSharedCode(codeVal) {
+        const list=document.getElementById('file-list'), status=document.getElementById('status');
+        status.innerHTML=`> RECHERCHE CODE : <span>${codeVal}</span>`;
+        list.innerHTML='<div class="loading">> DÉCRYPTAGE EN COURS...</div>';
+        document.getElementById('sync-badge').className='sync-badge show synced';
+        document.getElementById('sync-badge').textContent='⬢ CODE PARTAGÉ';
 
-        const reader = new FileReader();
-
-        if (currentUser) {
-            statusEl.innerHTML = '> ENVOI VERS SUPABASE...';
-            reader.onload = async function(e) {
-                const { error } = await sb.from('user_files').insert({
-                    user_id: currentUser.id,
-                    name: file.name,
-                    data: e.target.result,
-                    size: file.size
-                });
-                if (error) {
-                    statusEl.innerHTML = `<span style="color:var(--red)">!! ERREUR : ${error.message}</span>`;
-                } else {
-                    statusEl.innerHTML = `> <span style="color:var(--cyan)">SYNCHRONISÉ ✓ ${file.name}</span>`;
-                }
-            };
-        } else {
-            statusEl.textContent = '> ENCODAGE LOCAL...';
-            reader.onload = function(e) {
-                try {
-                    let files = JSON.parse(localStorage.getItem('m13_local_files')||'[]');
-                    files.push({ id: Date.now(), name: file.name, data: e.target.result, size: file.size });
-                    localStorage.setItem('m13_local_files', JSON.stringify(files));
-                    statusEl.innerHTML = `> <span style="color:var(--green)">ENCODÉ ✓ ${file.name}</span>`;
-                } catch(err) {
-                    statusEl.innerHTML = '<span style="color:var(--red)">!! STOCKAGE PLEIN — MAX ~5Mo</span>';
-                }
-            };
+        // Chercher le code dans Supabase
+        const {data:codeData, error:codeErr} = await sb.from('shared_codes').select('id,code,label').eq('code',codeVal).eq('is_active',true).single();
+        if (codeErr || !codeData) {
+            // Fallback → GitHub
+            currentMode='github';
+            document.getElementById('sync-badge').className='sync-badge';
+            fetchGitHub('Code/'+codeVal);
+            return;
         }
 
+        // Code trouvé → charger ses fichiers
+        const {data:files, error:filesErr} = await sb.from('code_files').select('*').eq('code_id',codeData.id).order('created_at',{ascending:false});
+        list.innerHTML='';
+        status.innerHTML=`> CODE <span>${codeData.code}</span>${codeData.label?' — '+codeData.label:''} — <span>${files?.length||0}</span> FICHIER(S)`;
+        if (!files?.length) { list.innerHTML='<div class="empty-state">// AUCUN FICHIER DANS CE CODE //</div>'; return; }
+        files.forEach(f => renderCodeFile(list, f, false));
+    }
+
+    // ── LOCAL/CLOUD UPLOAD ──
+    function saveLocalFile() {
+        const file=document.getElementById('local-file-input').files[0];
+        const statusEl=document.getElementById('upload-status');
+        if (!file) { statusEl.textContent="!! SÉLECTIONNER UN FICHIER D'ABORD"; return; }
+        const reader=new FileReader();
+        if (currentUser) {
+            statusEl.innerHTML='> ENVOI VERS SUPABASE...';
+            reader.onload = async function(e) {
+                const {error} = await sb.from('user_files').insert({user_id:currentUser.id, name:file.name, data:e.target.result, size:file.size});
+                statusEl.innerHTML = error ? `<span style="color:var(--red)">!! ERREUR : ${error.message}</span>` : `> <span style="color:var(--cyan)">SYNCHRONISÉ ✓ ${file.name}</span>`;
+            };
+        } else {
+            statusEl.textContent='> ENCODAGE LOCAL...';
+            reader.onload = function(e) {
+                try { let files=JSON.parse(localStorage.getItem('m13_local_files')||'[]'); files.push({id:Date.now(),name:file.name,data:e.target.result,size:file.size}); localStorage.setItem('m13_local_files',JSON.stringify(files)); statusEl.innerHTML=`> <span style="color:var(--green)">ENCODÉ ✓ ${file.name}</span>`; }
+                catch(err) { statusEl.innerHTML='<span style="color:var(--red)">!! STOCKAGE PLEIN — MAX ~5Mo</span>'; }
+            };
+        }
         reader.readAsDataURL(file);
     }
 
-    // ── LIST LOCAL/CLOUD ──
     async function fetchLocal() {
-        const list = document.getElementById('file-list');
-        const status = document.getElementById('status');
-        const badge = document.getElementById('sync-badge');
-        list.innerHTML = '<div class="loading">> CHARGEMENT...</div>';
-
+        const list=document.getElementById('file-list'), status=document.getElementById('status'), badge=document.getElementById('sync-badge');
+        list.innerHTML='<div class="loading">> CHARGEMENT...</div>';
         if (currentUser) {
-            badge.className = 'sync-badge show synced';
-            badge.textContent = '⬢ CLOUD SYNC';
-            const { data, error } = await sb.from('user_files').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: false });
-            list.innerHTML = '';
-            if (error) { status.innerHTML = `<span style="color:var(--red)">!! ERREUR SUPABASE !!</span>`; return; }
-            status.innerHTML = `> CLOUD — <span>${data.length}</span> FICHIER(S)`;
-            if (!data.length) { list.innerHTML = '<div class="empty-state">// AUCUN FICHIER CLOUD //</div>'; return; }
+            badge.className='sync-badge show synced'; badge.textContent='⬢ CLOUD SYNC';
+            const {data,error} = await sb.from('user_files').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false});
+            list.innerHTML='';
+            if (error) { status.innerHTML='<span style="color:var(--red)">!! ERREUR SUPABASE !!</span>'; return; }
+            status.innerHTML=`> CLOUD — <span>${data.length}</span> FICHIER(S)`;
+            if (!data.length) { list.innerHTML='<div class="empty-state">// AUCUN FICHIER CLOUD //</div>'; return; }
             data.forEach(f => {
-                const div = document.createElement('div');
-                div.className = 'file-item';
-                div.style.borderColor = 'rgba(0,204,255,0.25)';
-                div.innerHTML = `
-                    <div class="file-ext-badge" style="color:var(--cyan);border-color:var(--cyan)">CLOUD</div>
-                    <a href="${f.data}" target="_blank" class="file-name">${f.name}</a>
-                    <div class="file-actions">
-                        <a href="${f.data}" download="${f.name}" class="btn-dl" style="border-color:rgba(0,204,255,0.3);color:var(--cyan)">⬇ TÉLÉCHARGER</a>
-                        <button class="btn-del" onclick="deleteCloud(${f.id})">✕ DEL</button>
-                    </div>`;
+                const div=document.createElement('div'); div.className='file-item'; div.style.borderColor='rgba(0,204,255,0.25)';
+                div.innerHTML=`<div class="file-ext-badge" style="color:var(--cyan);border-color:var(--cyan)">CLOUD</div><a href="${f.data}" target="_blank" class="file-name">${f.name}</a><div class="file-actions"><a href="${f.data}" download="${f.name}" class="btn-dl" style="border-color:rgba(0,204,255,0.3);color:var(--cyan)">⬇ TÉLÉCHARGER</a><button class="btn-del" onclick="deleteCloud(${f.id})">✕ DEL</button></div>`;
                 list.appendChild(div);
             });
         } else {
-            badge.className = 'sync-badge show';
-            badge.textContent = '⬡ LOCAL';
-            const files = JSON.parse(localStorage.getItem('m13_local_files')||'[]');
-            list.innerHTML = '';
-            status.innerHTML = `> ARCHIVES LOCALES — <span>${files.length}</span> FICHIER(S)`;
-            if (!files.length) { list.innerHTML = '<div class="empty-state">// AUCUNE ARCHIVE LOCALE //</div>'; return; }
+            badge.className='sync-badge show'; badge.textContent='⬡ LOCAL';
+            const files=JSON.parse(localStorage.getItem('m13_local_files')||'[]');
+            list.innerHTML='';
+            status.innerHTML=`> ARCHIVES LOCALES — <span>${files.length}</span> FICHIER(S)`;
+            if (!files.length) { list.innerHTML='<div class="empty-state">// AUCUNE ARCHIVE LOCALE //</div>'; return; }
             files.forEach(f => {
-                const div = document.createElement('div');
-                div.className = 'file-item';
-                div.innerHTML = `
-                    <div class="file-ext-badge" style="color:var(--yellow);border-color:var(--yellow)">LOCAL</div>
-                    <a href="${f.data}" target="_blank" class="file-name">${f.name}</a>
-                    <div class="file-actions">
-                        <a href="${f.data}" download="${f.name}" class="btn-dl">⬇ TÉLÉCHARGER</a>
-                        <button class="btn-del" onclick="deleteLocal(${f.id})">✕ DEL</button>
-                    </div>`;
+                const div=document.createElement('div'); div.className='file-item';
+                div.innerHTML=`<div class="file-ext-badge" style="color:var(--yellow);border-color:var(--yellow)">LOCAL</div><a href="${f.data}" target="_blank" class="file-name">${f.name}</a><div class="file-actions"><a href="${f.data}" download="${f.name}" class="btn-dl">⬇ TÉLÉCHARGER</a><button class="btn-del" onclick="deleteLocal(${f.id})">✕ DEL</button></div>`;
                 list.appendChild(div);
             });
         }
     }
 
-    async function deleteCloud(id) {
-        const { error } = await sb.from('user_files').delete().eq('id', id);
-        if (!error) fetchLocal();
+    async function deleteCloud(id) { const {error}=await sb.from('user_files').delete().eq('id',id); if (!error) fetchLocal(); }
+    function deleteLocal(id) { let files=JSON.parse(localStorage.getItem('m13_local_files')||'[]').filter(f=>f.id!==id); localStorage.setItem('m13_local_files',JSON.stringify(files)); fetchLocal(); }
+
+    // ══════════════════════════════════════
+    //  MCODE — SYSTÈME DE CODES PARTAGÉS
+    // ══════════════════════════════════════
+
+    async function loadMyCodes() {
+        const list = document.getElementById('codes-list');
+        list.innerHTML = '<div class="loading" style="grid-column:1/-1">> CHARGEMENT DES CODES...</div>';
+        const {data, error} = await sb.from('shared_codes').select('id,code,label,created_at').eq('owner_id',currentUser.id).order('created_at',{ascending:false});
+        list.innerHTML = '';
+        if (error) { list.innerHTML=`<div style="color:var(--red);font-size:12px;padding:20px">!! ERREUR : ${error.message}</div>`; return; }
+        if (!data.length) { list.innerHTML='<div class="empty-state" style="grid-column:1/-1">// AUCUN CODE CRÉÉ — CLIQUEZ "+" POUR COMMENCER //</div>'; return; }
+        for (const c of data) {
+            // Compter les fichiers
+            const {count} = await sb.from('code_files').select('*',{count:'exact',head:true}).eq('code_id',c.id);
+            const div = document.createElement('div');
+            div.className = 'code-card';
+            div.innerHTML = `
+                <button class="code-card-del" onclick="event.stopPropagation();deleteCode(${c.id})" title="Supprimer">✕</button>
+                <div class="code-card-name">${c.code}</div>
+                <div class="code-card-label">${c.label||'— sans nom —'}</div>
+                <div class="code-card-meta">
+                    <div class="code-card-stat">FICHIERS : <span>${count||0}</span></div>
+                    <div class="code-card-stat">CRÉÉ : <span>${new Date(c.created_at).toLocaleDateString('fr-FR')}</span></div>
+                </div>`;
+            div.addEventListener('click', () => openCodeDashboard(c));
+            list.appendChild(div);
+        }
     }
 
-    function deleteLocal(id) {
-        let files = JSON.parse(localStorage.getItem('m13_local_files')||'[]').filter(f => f.id !== id);
-        localStorage.setItem('m13_local_files', JSON.stringify(files));
-        fetchLocal();
+    async function createCode() {
+        const codeVal = document.getElementById('new-code-input').value.trim().toUpperCase().replace(/[^A-Z0-9]/g,'');
+        const label = document.getElementById('new-code-label').value.trim();
+        const statusEl = document.getElementById('create-code-status');
+        statusEl.className='modal-status'; statusEl.textContent='';
+        if (!codeVal) { statusEl.className='modal-status err'; statusEl.textContent='!! ENTRER UN CODE VALIDE !!'; return; }
+        if (codeVal.length < 3) { statusEl.className='modal-status err'; statusEl.textContent='!! CODE TROP COURT (MIN 3 CARACTÈRES) !!'; return; }
+        statusEl.textContent='> VÉRIFICATION...';
+        const {error} = await sb.from('shared_codes').insert({owner_id:currentUser.id, code:codeVal, label:label||null});
+        if (error) {
+            statusEl.className='modal-status err';
+            statusEl.textContent = error.code==='23505' ? '!! CODE DÉJÀ UTILISÉ — CHOISIR UN AUTRE !!' : '!! ERREUR : '+error.message;
+        } else {
+            statusEl.className='modal-status ok'; statusEl.textContent=`> CODE "${codeVal}" CRÉÉ ✓`;
+            document.getElementById('new-code-input').value='';
+            document.getElementById('new-code-label').value='';
+            setTimeout(() => { closeModal('modal-create-code'); loadMyCodes(); }, 900);
+        }
+    }
+
+    async function deleteCode(id) {
+        if (!confirm('Supprimer ce code et tous ses fichiers ?')) return;
+        await sb.from('shared_codes').delete().eq('id',id);
+        loadMyCodes();
+    }
+
+    function openCodeDashboard(c) {
+        activCodeId = c.id;
+        activCodeName = c.code;
+        document.getElementById('dash-code-name').textContent = c.code;
+        document.getElementById('dash-code-label').textContent = c.label || '— sans nom —';
+        document.getElementById('dash-code-share').textContent = c.code;
+        showPanel('code-dashboard');
+        loadCodeFiles();
+    }
+
+    function backToMyCodes() { showPanel('mcode-panel'); loadMyCodes(); }
+
+    function copyCode() {
+        navigator.clipboard.writeText(activCodeName).then(() => {
+            const btn = event.target; btn.textContent='✓ COPIÉ !'; setTimeout(()=>btn.textContent='📋 COPIER',1500);
+        });
+    }
+
+    async function loadCodeFiles() {
+        const list = document.getElementById('code-file-list');
+        list.innerHTML='<div class="loading">> CHARGEMENT...</div>';
+        const {data,error} = await sb.from('code_files').select('*').eq('code_id',activCodeId).order('created_at',{ascending:false});
+        list.innerHTML='';
+        if (error) { list.innerHTML=`<div style="color:var(--red);font-size:12px;padding:20px">!! ERREUR !!</div>`; return; }
+        if (!data.length) { list.innerHTML='<div class="empty-state">// AUCUN FICHIER — CLIQUEZ "+ AJOUTER DES FICHIERS" //</div>'; return; }
+        data.forEach(f => renderCodeFile(list, f, true));
+    }
+
+    function renderCodeFile(container, f, canDelete) {
+        const ext = (f.name.split('.').pop()||'').toLowerCase();
+        const src = f.source==='cloud' ? 'var(--cyan)' : 'var(--green)';
+        const srcLabel = f.source==='cloud' ? 'CLOUD' : 'UPLOAD';
+        const div = document.createElement('div');
+        div.className = 'file-item';
+        div.innerHTML = `
+            <div style="display:flex;gap:6px;align-items:center;margin-bottom:8px;">
+                <div class="file-ext-badge ${getExtClass(ext)}">${ext.toUpperCase()||'?'}</div>
+                <div class="file-ext-badge" style="color:${src};border-color:${src};opacity:0.7">${srcLabel}</div>
+            </div>
+            <a href="${f.data}" target="_blank" class="file-name">${f.name}</a>
+            <div class="file-actions">
+                <a href="${f.data}" download="${f.name}" class="btn-dl">⬇ TÉLÉCHARGER</a>
+                ${canDelete ? `<button class="btn-del" onclick="deleteCodeFile(${f.id})">✕ DEL</button>` : ''}
+            </div>`;
+        container.appendChild(div);
+    }
+
+    async function deleteCodeFile(id) {
+        await sb.from('code_files').delete().eq('id',id);
+        loadCodeFiles();
+    }
+
+    // ── IMPORT MODAL ──
+    function openImportModal() {
+        document.getElementById('import-status').className='modal-status'; document.getElementById('import-status').textContent='';
+        openModal('modal-import-files');
+        switchImportTab('upload');
+    }
+
+    function switchImportTab(tab) {
+        document.querySelectorAll('.import-tab').forEach((t,i) => t.classList.toggle('active',(tab==='upload'&&i===0)||(tab==='cloud'&&i===1)));
+        document.getElementById('import-pane-upload').classList.toggle('active', tab==='upload');
+        document.getElementById('import-pane-cloud').classList.toggle('active', tab==='cloud');
+        if (tab==='cloud') loadCloudSelector();
+    }
+
+    async function loadCloudSelector() {
+        const sel = document.getElementById('cloud-file-selector');
+        sel.innerHTML='<div style="padding:20px;text-align:center;color:rgba(0,255,65,0.3);font-size:12px;">CHARGEMENT...</div>';
+        const {data,error} = await sb.from('user_files').select('id,name').eq('user_id',currentUser.id).order('created_at',{ascending:false});
+        sel.innerHTML='';
+        if (!data?.length) { sel.innerHTML='<div style="padding:20px;text-align:center;color:rgba(0,255,65,0.25);font-size:12px;letter-spacing:2px;">// AUCUN FICHIER CLOUD //</div>'; return; }
+        data.forEach(f => {
+            const ext=(f.name.split('.').pop()||'').toLowerCase();
+            const row=document.createElement('div'); row.className='cloud-file-row';
+            row.innerHTML=`<input type="checkbox" value="${f.id}" id="cf-${f.id}"><div class="cloud-file-row-ext ${getExtClass(ext)}">${ext.toUpperCase()||'?'}</div><label class="cloud-file-row-name" for="cf-${f.id}">${f.name}</label>`;
+            row.querySelector('input').addEventListener('change', updateSelectedCount);
+            sel.appendChild(row);
+        });
+        updateSelectedCount();
+    }
+
+    function updateSelectedCount() {
+        const checked = document.querySelectorAll('#cloud-file-selector input[type="checkbox"]:checked').length;
+        document.getElementById('selected-count').textContent=`${checked} SÉLECTIONNÉ(S)`;
+    }
+
+    let allSelected = false;
+    function toggleSelectAll() {
+        allSelected = !allSelected;
+        document.querySelectorAll('#cloud-file-selector input[type="checkbox"]').forEach(cb => cb.checked=allSelected);
+        updateSelectedCount();
+    }
+
+    async function importFromUpload() {
+        const files = document.getElementById('import-file-input').files;
+        const statusEl = document.getElementById('import-status');
+        if (!files.length) { statusEl.className='modal-status err'; statusEl.textContent='!! SÉLECTIONNER AU MOINS UN FICHIER !!'; return; }
+        statusEl.className='modal-status'; statusEl.textContent=`> ENCODAGE DE ${files.length} FICHIER(S)...`;
+        let ok=0, fail=0;
+        for (const file of files) {
+            const data = await new Promise(res => { const r=new FileReader(); r.onload=e=>res(e.target.result); r.readAsDataURL(file); });
+            const {error} = await sb.from('code_files').insert({code_id:activCodeId, owner_id:currentUser.id, name:file.name, data, size:file.size, source:'upload'});
+            if (error) fail++; else ok++;
+        }
+        statusEl.className=fail?'modal-status err':'modal-status ok';
+        statusEl.textContent=`> ${ok} FICHIER(S) AJOUTÉ(S)${fail?` — ${fail} ERREUR(S)`:' ✓'}`;
+        document.getElementById('import-upload-list').textContent='';
+        if (ok) { setTimeout(()=>{ closeModal('modal-import-files'); loadCodeFiles(); },900); }
+    }
+
+    async function importFromCloud() {
+        const checked = [...document.querySelectorAll('#cloud-file-selector input[type="checkbox"]:checked')];
+        const statusEl = document.getElementById('import-status');
+        if (!checked.length) { statusEl.className='modal-status err'; statusEl.textContent='!! SÉLECTIONNER AU MOINS UN FICHIER !!'; return; }
+        statusEl.className='modal-status'; statusEl.textContent=`> IMPORTATION DE ${checked.length} FICHIER(S)...`;
+        const ids = checked.map(cb=>parseInt(cb.value));
+        const {data:cloudFiles,error:fetchErr} = await sb.from('user_files').select('*').in('id',ids);
+        if (fetchErr) { statusEl.className='modal-status err'; statusEl.textContent='!! ERREUR RÉCUPÉRATION !!'; return; }
+        let ok=0, fail=0;
+        for (const f of cloudFiles) {
+            const {error} = await sb.from('code_files').insert({code_id:activCodeId, owner_id:currentUser.id, name:f.name, data:f.data, size:f.size, source:'cloud'});
+            if (error) fail++; else ok++;
+        }
+        statusEl.className=fail?'modal-status err':'modal-status ok';
+        statusEl.textContent=`> ${ok} FICHIER(S) IMPORTÉ(S)${fail?` — ${fail} ERREUR(S)`:' ✓'}`;
+        if (ok) { setTimeout(()=>{ closeModal('modal-import-files'); loadCodeFiles(); },900); }
     }
 
     // ── MISC ──
-    function toggleHelp() {
-        const m = document.getElementById('help-modal');
-        m.style.display = m.style.display === 'block' ? 'none' : 'block';
-    }
+    function toggleHelp() { const m=document.getElementById('help-modal'); m.style.display=m.style.display==='block'?'none':'block'; }
 
     async function updateVersion() {
-        const el = document.getElementById('version-display');
-        try {
-            const res = await fetch(`https://api.github.com/repos/${GH_USER}/${GH_REPO}/commits`);
-            const data = await res.json();
-            el.textContent = `V.3.2.${data.length} | BY M13`;
-        } catch(e) { el.textContent = 'V.3.2.0 | M13'; }
+        const el=document.getElementById('version-display');
+        try { const res=await fetch(`https://api.github.com/repos/${GH_USER}/${GH_REPO}/commits`); const data=await res.json(); el.textContent=`V.3.3.${data.length} | BY M13`; }
+        catch(e) { el.textContent='V.3.3.0 | M13'; }
     }
 
     updateVersion();
-    sb.auth.getSession().then(({ data }) => {
-        currentUser = data?.session?.user || null;
-        updateAuthUI();
-    });
+    sb.auth.getSession().then(({data}) => { currentUser=data?.session?.user||null; updateAuthUI(); });
 </script>
 </body>
 </html>
