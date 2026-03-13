@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Cloud M13</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=VT323&display=swap');
+
+        :root {
+            --green: #00ff41;
+            --green-dim: rgba(0,255,65,0.15);
+            --green-glow: rgba(0,255,65,0.4);
+            --red: #ff2a2a;
+            --yellow: #ffe033;
+            --bg: #000;
+            --text: #00ff41;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Share Tech Mono', 'Courier New', monospace;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* CRT Scanlines overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0,0,0,0.08) 2px,
+                rgba(0,0,0,0.08) 4px
+            );
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* CRT vignette */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.7) 100%);
+            pointer-events: none;
+            z-index: 9998;
+        }
+
+        /* ── BACKGROUND GRID ── */
+        .bg-grid {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-image:
+                linear-gradient(rgba(0,255,65,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,255,65,0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ── LAYOUT ── */
+        .wrapper {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px 80px;
+            min-height: 100vh;
+        }
+
+        /* ── HEADER ── */
+        .header {
+            width: 100%;
+            max-width: 700px;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header-badge {
+            font-size: 11px;
+            letter-spacing: 4px;
+            color: rgba(0,255,65,0.5);
+            margin-bottom: 10px;
+            animation: blink 2s step-end infinite;
+        }
+
+        @keyframes blink { 50% { opacity: 0; } }
+
+        .glitch {
+            font-family: 'VT323', monospace;
+            font-size: clamp(36px, 8vw, 64px);
+            letter-spacing: 6px;
+            color: var(--green);
+            text-shadow:
+                2px 0 var(--red),
+                -2px 0 #00f,
+                0 0 30px var(--green-glow);
+            position: relative;
+            animation: glitch-anim 4s infinite;
+            display: inline-block;
+        }
+
+        @keyframes glitch-anim {
+            0%, 90%, 100% { clip-path: none; transform: none; }
+            91% { clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%); transform: translate(-3px, -2px); color: #ff2a2a; }
+            92% { clip-path: polygon(0 60%, 100% 60%, 100% 100%, 0 100%); transform: translate(3px, 2px); color: #00f; }
+            93% { clip-path: none; transform: none; color: var(--green); }
+            95% { clip-path: polygon(0 40%, 100% 40%, 100% 55%, 0 55%); transform: translate(-2px, 0); }
+            96% { clip-path: none; transform: none; }
+        }
+
+        .header-line {
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--green), transparent);
+            margin-top: 16px;
+        }
+
+        /* ── PANELS ── */
+        .panel {
+            width: 100%;
+            max-width: 440px;
+            border: 1px solid var(--green);
+            background: rgba(0,255,65,0.03);
+            box-shadow: 0 0 20px rgba(0,255,65,0.1), inset 0 0 20px rgba(0,255,65,0.02);
+            padding: 32px;
+        }
+
+        .panel-title {
+            font-size: 11px;
+            letter-spacing: 3px;
+            color: rgba(0,255,65,0.6);
+            margin-bottom: 24px;
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        .panel-title span {
+            border-bottom: 1px solid rgba(0,255,65,0.3);
+            padding-bottom: 8px;
+        }
+
+        /* ── LOGIN ── */
+        .prompt-line {
+            font-size: 13px;
+            color: rgba(0,255,65,0.7);
+            margin-bottom: 12px;
+            letter-spacing: 1px;
+        }
+
+        .input-wrap {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .input-wrap::before {
+            content: '▶';
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--green);
+            font-size: 12px;
+        }
+
+        input[type="password"], input[type="text"] {
+            width: 100%;
+            background: rgba(0,255,65,0.05);
+            border: 1px solid rgba(0,255,65,0.4);
+            border-left: 2px solid var(--green);
+            color: var(--green);
+            padding: 12px 12px 12px 30px;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 15px;
+            letter-spacing: 3px;
+            outline: none;
+            transition: all 0.2s;
+            text-transform: uppercase;
+        }
+
+        input[type="password"]:focus, input[type="text"]:focus {
+            border-color: var(--green);
+            background: rgba(0,255,65,0.08);
+            box-shadow: 0 0 12px rgba(0,255,65,0.2);
+        }
+
+        input[type="file"] {
+            color: var(--green);
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 12px;
+            width: 100%;
+            margin-bottom: 20px;
+            background: rgba(0,255,65,0.05);
+            border: 1px dashed rgba(0,255,65,0.4);
+            padding: 12px;
+            cursor: pointer;
+        }
+
+        input[type="file"]::-webkit-file-upload-button {
+            background: var(--green);
+            color: #000;
+            border: none;
+            padding: 6px 12px;
+            font-family: 'Share Tech Mono', monospace;
+            font-weight: bold;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        /* ── BUTTONS ── */
+        .btn {
+            background: transparent;
+            border: 1px solid var(--green);
+            color: var(--green);
+            padding: 10px 24px;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 13px;
+            letter-spacing: 2px;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: all 0.15s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: var(--green);
+            transition: left 0.2s;
+            z-index: -1;
+        }
+
+        .btn:hover { color: #000; box-shadow: 0 0 15px var(--green-glow); }
+        .btn:hover::after { left: 0; }
+
+        .btn-primary { background: var(--green); color: #000; font-weight: bold; width: 100%; }
+        .btn-primary::after { background: #fff; }
+        .btn-primary:hover { color: #000; box-shadow: 0 0 20px rgba(255,255,255,0.4); }
+
+        .btn-danger { border-color: var(--red); color: var(--red); }
+        .btn-danger::after { background: var(--red); }
+        .btn-danger:hover { color: #fff; }
+
+        .btn-row { display: flex; gap: 10px; }
+        .btn-row .btn { flex: 1; }
+
+        /* ── ERROR ── */
+        .error-msg {
+            color: var(--red);
+            font-size: 12px;
+            letter-spacing: 2px;
+            margin-top: 12px;
+            min-height: 20px;
+            text-align: center;
+        }
+
+        .error-msg.show { animation: shake 0.3s; }
+        @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+
+        /* ── CLOUD CONTENT ── */
+        #cloud-content {
+            display: none;
+            width: 100%;
+            max-width: 860px;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .cloud-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid rgba(0,255,65,0.2);
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .status-line {
+            font-size: 12px;
+            letter-spacing: 1px;
+            color: rgba(0,255,65,0.7);
+            flex: 1;
+        }
+
+        .status-line span { color: var(--green); }
+
+        /* ── FILE GRID ── */
+        #file-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 12px;
+        }
+
+        .file-item {
+            border: 1px solid rgba(0,255,65,0.2);
+            background: rgba(0,255,65,0.03);
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .file-item::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 2px;
+            height: 0;
+            background: var(--green);
+            transition: height 0.2s;
+        }
+
+        .file-item:hover {
+            border-color: rgba(0,255,65,0.5);
+            background: rgba(0,255,65,0.06);
+            box-shadow: 0 0 12px rgba(0,255,65,0.08);
+        }
+
+        .file-item:hover::before { height: 100%; }
+
+        .file-ext-badge {
+            display: inline-block;
+            font-size: 9px;
+            letter-spacing: 2px;
+            padding: 2px 6px;
+            border: 1px solid currentColor;
+            margin-bottom: 8px;
+            width: fit-content;
+        }
+
+        .ext-img { color: #00ccff; }
+        .ext-pdf { color: var(--red); }
+        .ext-txt { color: rgba(0,255,65,0.8); }
+        .ext-vid { color: var(--yellow); }
+        .ext-aud { color: #cc66ff; }
+        .ext-arc { color: #ff9900; }
+        .ext-exe { color: var(--red); }
+        .ext-local { color: var(--yellow); }
+
+        .file-name {
+            color: #e0ffe8;
+            font-size: 13px;
+            flex: 1;
+            margin-bottom: 14px;
+            word-break: break-word;
+            line-height: 1.4;
+            cursor: pointer;
+            text-decoration: none;
+            display: block;
+        }
+
+        .file-name:hover { color: var(--green); }
+
+        .file-actions {
+            display: flex;
+            gap: 8px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(0,255,65,0.1);
+        }
+
+        .btn-dl {
+            flex: 1;
+            background: rgba(0,255,65,0.1);
+            color: var(--green);
+            border: 1px solid rgba(0,255,65,0.3);
+            padding: 6px;
+            font-size: 10px;
+            letter-spacing: 1px;
+            text-align: center;
+            text-decoration: none;
+            font-family: 'Share Tech Mono', monospace;
+            cursor: pointer;
+            transition: all 0.15s;
+            text-transform: uppercase;
+        }
+
+        .btn-dl:hover {
+            background: var(--green);
+            color: #000;
+        }
+
+        .btn-del {
+            background: rgba(255,42,42,0.1);
+            color: var(--red);
+            border: 1px solid rgba(255,42,42,0.3);
+            padding: 6px 10px;
+            font-size: 10px;
+            cursor: pointer;
+            font-family: 'Share Tech Mono', monospace;
+            transition: all 0.15s;
+        }
+
+        .btn-del:hover {
+            background: var(--red);
+            color: #fff;
+        }
+
+        /* ── EMPTY STATE ── */
+        .empty-state {
+            grid-column: 1/-1;
+            text-align: center;
+            padding: 60px 20px;
+            color: rgba(0,255,65,0.3);
+            font-size: 13px;
+            letter-spacing: 2px;
+        }
+
+        /* ── LOADING ── */
+        .loading {
+            grid-column: 1/-1;
+            text-align: center;
+            padding: 40px;
+            color: rgba(0,255,65,0.5);
+        }
+
+        .loading::after {
+            content: '';
+            animation: dots 1.2s steps(4, end) infinite;
+        }
+
+        @keyframes dots {
+            0%   { content: ''; }
+            25%  { content: '.'; }
+            50%  { content: '..'; }
+            75%  { content: '...'; }
+            100% { content: '....'; }
+        }
+
+        /* ── VERSION ── */
+        #version-display {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            font-size: 10px;
+            letter-spacing: 2px;
+            color: rgba(0,255,65,0.4);
+            z-index: 100;
+            text-transform: uppercase;
+        }
+
+        /* ── HELP ── */
+        #help-trigger {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid rgba(0,255,65,0.5);
+            color: rgba(0,255,65,0.7);
+            padding: 6px 14px;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 2px;
+            cursor: pointer;
+            z-index: 1000;
+            transition: all 0.2s;
+        }
+
+        #help-trigger:hover {
+            background: var(--green);
+            color: #000;
+            box-shadow: 0 0 12px var(--green-glow);
+        }
+
+        #help-modal {
+            display: none;
+            position: fixed;
+            bottom: 60px;
+            right: 20px;
+            width: 300px;
+            background: #050f05;
+            border: 1px solid rgba(0,255,65,0.5);
+            padding: 20px;
+            z-index: 1000;
+            font-size: 12px;
+            box-shadow: 0 0 30px rgba(0,255,65,0.15);
+            animation: fadeIn 0.2s;
+        }
+
+        #help-modal h3 {
+            font-family: 'VT323', monospace;
+            font-size: 20px;
+            letter-spacing: 3px;
+            border-bottom: 1px solid rgba(0,255,65,0.3);
+            padding-bottom: 10px;
+            margin-bottom: 16px;
+        }
+
+        .cmd-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            align-items: flex-start;
+        }
+
+        .cmd-key {
+            background: rgba(0,255,65,0.1);
+            border: 1px solid rgba(0,255,65,0.4);
+            color: var(--green);
+            padding: 2px 8px;
+            font-size: 12px;
+            white-space: nowrap;
+            min-width: 60px;
+            text-align: center;
+        }
+
+        .cmd-desc {
+            color: rgba(0,255,65,0.6);
+            font-size: 11px;
+            line-height: 1.5;
+        }
+
+        /* ── UPLOAD STATUS ── */
+        #upload-status {
+            margin-top: 14px;
+            font-size: 12px;
+            letter-spacing: 1px;
+            color: rgba(0,255,65,0.7);
+            min-height: 20px;
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 500px) {
+            .wrapper { padding: 24px 14px 80px; }
+            .panel { padding: 24px 18px; }
+            #file-list { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+    <div id="version-display">V. INIT...</div>
+
+    <div class="wrapper">
+        <div class="header">
+            <div class="header-badge">// SYSTÈME SÉCURISÉ — ACCÈS RESTREINT //</div>
+            <div class="glitch">SYSTEM CLOUD M13</div>
+            <div class="header-line"></div>
+        </div>
+
+        <!-- LOGIN -->
+        <div id="login-box" class="panel">
+            <div class="panel-title"><span>AUTHENTIFICATION REQUISE</span></div>
+            <div class="prompt-line">> ENTRER CLÉ D'ACCÈS :</div>
+            <div class="input-wrap">
+                <input type="password" id="pass-input" placeholder="CODE / DOSSIER"
+                    onkeypress="if(event.key==='Enter')verifyAccess()" autocomplete="off">
+            </div>
+            <button class="btn btn-primary" onclick="verifyAccess()">DÉCRYPTER &amp; ACCÉDER</button>
+            <div id="error-msg" class="error-msg"></div>
+        </div>
+
+        <!-- LOCAL UPLOAD -->
+        <div id="local-upload-box" class="panel" style="display:none;">
+            <div class="panel-title"><span>ENCODEUR LOCAL</span></div>
+            <div class="prompt-line">> SÉLECTIONNER UN FICHIER :</div>
+            <input type="file" id="local-file-input">
+            <div class="btn-row">
+                <button class="btn btn-primary" onclick="saveLocalFile()">ENCODER</button>
+                <button class="btn btn-danger" onclick="location.reload()">ANNULER</button>
+            </div>
+            <div id="upload-status"></div>
+        </div>
+
+        <!-- CLOUD CONTENT -->
+        <div id="cloud-content">
+            <div class="cloud-header">
+                <div class="status-line" id="status">> LECTURE DU SECTEUR</div>
+                <button class="btn btn-danger" onclick="location.reload()">[X] FERMER SESSION</button>
+            </div>
+            <div id="file-list"></div>
+        </div>
+    </div>
+
+    <!-- FIXED UI -->
+    <div id="version-display">V. LOADING...</div>
+    <button id="help-trigger" onclick="toggleHelp()">? AIDE</button>
+    <div id="help-modal">
+        <h3>COMMANDES</h3>
+        <div class="cmd-row">
+            <div class="cmd-key">M13S</div>
+            <div class="cmd-desc">Accès racine du dépôt GitHub</div>
+        </div>
+        <div class="cmd-row">
+            <div class="cmd-key">[CODE]</div>
+            <div class="cmd-desc">Accès au sous-répertoire <span style="color:var(--green)">/Code/[CODE]</span></div>
+        </div>
+        <div class="cmd-row">
+            <div class="cmd-key">LOCAL</div>
+            <div class="cmd-desc">Encoder un fichier en stockage local (≈5Mo)</div>
+        </div>
+        <div class="cmd-row">
+            <div class="cmd-key">LSEE</div>
+            <div class="cmd-desc">Afficher les fichiers encodés localement</div>
+        </div>
+    </div>
+
+    <script>
+        const username = 'wyatt854';
+        const repo_name = 'm13-cloud';
+        const allowedExtensions = ['jpg','jpeg','png','gif','pdf','txt','mp4','mp3','zip','rar','exe'];
+
+        const extCategories = {
+            img: ['jpg','jpeg','png','gif'],
+            pdf: ['pdf'],
+            txt: ['txt'],
+            vid: ['mp4'],
+            aud: ['mp3'],
+            arc: ['zip','rar'],
+            exe: ['exe']
+        };
+
+        function getExtClass(ext) {
+            for (const [cat, exts] of Object.entries(extCategories)) {
+                if (exts.includes(ext)) return 'ext-' + cat;
+            }
+            return '';
+        }
+
+        function verifyAccess() {
+            const val = document.getElementById('pass-input').value.trim().toUpperCase();
+            const err = document.getElementById('error-msg');
+            err.innerText = '';
+
+            if (val === 'M13S') { showCloud(); fetchGitHub(''); }
+            else if (val === 'LOCAL') {
+                document.getElementById('login-box').style.display = 'none';
+                document.getElementById('local-upload-box').style.display = 'block';
+            }
+            else if (val === 'LSEE') { showCloud(); fetchLocal(); }
+            else if (val !== '') { showCloud(); fetchGitHub('Code/' + val); }
+            else {
+                err.innerText = '!! ACCÈS REFUSÉ — CLÉ INVALIDE !!';
+                err.classList.remove('show');
+                void err.offsetWidth;
+                err.classList.add('show');
+            }
+        }
+
+        function showCloud() {
+            document.getElementById('login-box').style.display = 'none';
+            document.getElementById('cloud-content').style.display = 'block';
+        }
+
+        async function fetchGitHub(path) {
+            const list = document.getElementById('file-list');
+            const status = document.getElementById('status');
+            status.innerHTML = `> LECTURE DU SECTEUR : <span>${path || 'ROOT'}</span>`;
+            list.innerHTML = '<div class="loading">> CHARGEMENT EN COURS</div>';
+
+            try {
+                const res = await fetch(`https://api.github.com/repos/${username}/${repo_name}/contents/${path}`);
+                const data = await res.json();
+                list.innerHTML = '';
+                if (!Array.isArray(data)) throw new Error('Dossier introuvable');
+
+                const files = data.filter(f => {
+                    const ext = f.name.split('.').pop().toLowerCase();
+                    return allowedExtensions.includes(ext);
+                });
+
+                if (files.length === 0) {
+                    list.innerHTML = '<div class="empty-state">// SECTEUR VIDE — AUCUN FICHIER TROUVÉ //</div>';
+                    return;
+                }
+
+                status.innerHTML = `> SECTEUR <span>${path || 'ROOT'}</span> — <span>${files.length}</span> FICHIER(S) DÉTECTÉ(S)`;
+
+                files.forEach(file => {
+                    const ext = file.name.split('.').pop().toLowerCase();
+                    const extClass = getExtClass(ext);
+                    const div = document.createElement('div');
+                    div.className = 'file-item';
+                    div.innerHTML = `
+                        <div class="file-ext-badge ${extClass}">${ext.toUpperCase()}</div>
+                        <a href="${file.download_url}" target="_blank" class="file-name">${file.name}</a>
+                        <div class="file-actions">
+                            <a href="${file.download_url}" download="${file.name}" class="btn-dl">⬇ TÉLÉCHARGER</a>
+                        </div>`;
+                    list.appendChild(div);
+                });
+            } catch (e) {
+                list.innerHTML = '';
+                status.innerHTML = `<span style="color:var(--red)">!! ERREUR — ${e.message || 'SECTEUR INACCESSIBLE'} !!</span>`;
+            }
+        }
+
+        function saveLocalFile() {
+            const file = document.getElementById('local-file-input').files[0];
+            const statusEl = document.getElementById('upload-status');
+            if (!file) { statusEl.innerText = '!! SÉLECTIONNER UN FICHIER D\'ABORD'; return; }
+
+            statusEl.innerText = '> ENCODAGE EN COURS...';
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    let files = JSON.parse(localStorage.getItem('m13_local_files') || '[]');
+                    files.push({ id: Date.now(), name: file.name, data: e.target.result, size: file.size });
+                    localStorage.setItem('m13_local_files', JSON.stringify(files));
+                    statusEl.innerHTML = `> FICHIER ENCODÉ : <span style="color:var(--green)">${file.name}</span>`;
+                } catch(err) {
+                    statusEl.innerHTML = '<span style="color:var(--red)">!! ERREUR — STOCKAGE PLEIN (MAX ~5Mo) !!</span>';
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function fetchLocal() {
+            const list = document.getElementById('file-list');
+            const status = document.getElementById('status');
+            list.innerHTML = '';
+            let files = JSON.parse(localStorage.getItem('m13_local_files') || '[]');
+
+            status.innerHTML = `> ARCHIVES LOCALES — <span>${files.length}</span> FICHIER(S)`;
+
+            if (files.length === 0) {
+                list.innerHTML = '<div class="empty-state">// AUCUNE ARCHIVE LOCALE //</div>';
+                return;
+            }
+
+            files.forEach(f => {
+                const ext = (f.name.split('.').pop() || '').toLowerCase();
+                const extClass = getExtClass(ext);
+                const div = document.createElement('div');
+                div.className = 'file-item';
+                div.innerHTML = `
+                    <div class="file-ext-badge ext-local">LOCAL</div>
+                    <a href="${f.data}" target="_blank" class="file-name">${f.name}</a>
+                    <div class="file-actions">
+                        <a href="${f.data}" download="${f.name}" class="btn-dl">⬇ TÉLÉCHARGER</a>
+                        <button class="btn-del" onclick="deleteLocal(${f.id})">✕ DEL</button>
+                    </div>`;
+                list.appendChild(div);
+            });
+        }
+
+        function deleteLocal(id) {
+            let files = JSON.parse(localStorage.getItem('m13_local_files') || '[]').filter(f => f.id !== id);
+            localStorage.setItem('m13_local_files', JSON.stringify(files));
+            fetchLocal();
+        }
+
+        function toggleHelp() {
+            const m = document.getElementById('help-modal');
+            m.style.display = (m.style.display === 'block') ? 'none' : 'block';
+        }
+
+        async function updateVersion() {
+            const el = document.getElementById('version-display');
+            try {
+                const res = await fetch(`https://api.github.com/repos/${username}/${repo_name}/commits`);
+                const data = await res.json();
+                el.innerText = `V.3.1.${data.length} | BY M13`;
+            } catch(e) {
+                el.innerText = 'V.3.0.0 | M13';
+            }
+        }
+        updateVersion();
+    </script>
+</body>
+</html>
