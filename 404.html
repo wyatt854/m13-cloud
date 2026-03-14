@@ -218,12 +218,15 @@
     const segments = pathname.split('/').filter(Boolean); // ["WYATT"]
     const code = segments[0] ? segments[0].toUpperCase().replace(/[^A-Z0-9]/g,'') : null;
 
+    // Commandes réservées → NE PAS rediriger, afficher 404 normal
+    const RESERVED = ['M13S','LOCAL','LSEE','MCODE','MDIR','LSEE'];
+
     const modeLoading = document.getElementById('mode-loading');
     const mode404     = document.getElementById('mode-404');
     const bar         = document.getElementById('loading-bar');
     const statusEl    = document.getElementById('loading-status');
 
-    if (code && code.length >= 2) {
+    if (code && code.length >= 2 && !RESERVED.includes(code)) {
         // ── Il y a un code dans l'URL → animer puis rediriger ──
         modeLoading.style.display = 'block';
         document.getElementById('display-code').textContent = code;
