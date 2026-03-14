@@ -1127,7 +1127,23 @@
     }
 
     updateVersion();
-    sb.auth.getSession().then(({data}) => { currentUser=data?.session?.user||null; updateAuthUI(); });
+    sb.auth.getSession().then(({data}) => {
+        currentUser = data?.session?.user || null;
+        updateAuthUI();
+
+        // ── DÉTECTION CODE DEPUIS L'URL ──
+        // Récupéré depuis 404.html via sessionStorage
+        const urlCode = sessionStorage.getItem('m13_url_code');
+        if (urlCode) {
+            sessionStorage.removeItem('m13_url_code');
+            // Petit délai pour laisser l'auth s'initialiser
+            setTimeout(() => {
+                currentMode = 'shared-code';
+                showCloud();
+                fetchSharedCode(urlCode.toUpperCase());
+            }, 300);
+        }
+    });
 </script>
 </body>
 </html>

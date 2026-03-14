@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Cloud M13 — Accès</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=VT323&display=swap');
+
+        :root {
+            --green: #00ff41;
+            --red: #ff2a2a;
+            --purple: #cc66ff;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background: #000;
+            color: var(--green);
+            font-family: 'Share Tech Mono', 'Courier New', monospace;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        /* CRT scanlines */
+        body::before {
+            content: '';
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.1) 2px, rgba(0,0,0,0.1) 4px);
+            pointer-events: none; z-index: 99;
+        }
+        body::after {
+            content: '';
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.75) 100%);
+            pointer-events: none; z-index: 98;
+        }
+
+        /* Grid BG */
+        .bg-grid {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image:
+                linear-gradient(rgba(0,255,65,0.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,255,65,0.025) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none; z-index: 0;
+        }
+
+        .container {
+            position: relative; z-index: 10;
+            text-align: center;
+            padding: 40px 20px;
+            width: 100%; max-width: 600px;
+            animation: fadeIn 0.5s ease;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* ── MODE : CHARGEMENT CODE ── */
+        #mode-loading { display: none; }
+
+        .loading-code {
+            font-family: 'VT323', monospace;
+            font-size: clamp(48px, 12vw, 80px);
+            letter-spacing: 6px;
+            color: var(--green);
+            text-shadow: 0 0 30px rgba(0,255,65,0.6), 2px 0 #f00, -2px 0 #00f;
+            margin-bottom: 8px;
+            animation: glitch 3s infinite;
+        }
+        @keyframes glitch {
+            0%,88%,100% { text-shadow: 0 0 30px rgba(0,255,65,0.6), 2px 0 #f00, -2px 0 #00f; transform: none; }
+            89% { text-shadow: 0 0 30px rgba(0,255,65,0.6), 4px 0 #f00, -4px 0 #00f; transform: translate(-2px,0); }
+            90% { text-shadow: 0 0 30px rgba(0,255,65,0.6), -4px 0 #f00, 4px 0 #00f; transform: translate(2px,0); }
+            91% { text-shadow: 0 0 30px rgba(0,255,65,0.6), 2px 0 #f00, -2px 0 #00f; transform: none; }
+        }
+
+        .loading-label {
+            font-size: 11px;
+            letter-spacing: 4px;
+            color: rgba(0,255,65,0.4);
+            margin-bottom: 40px;
+            animation: blink 1.5s step-end infinite;
+        }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        .loading-bar-wrap {
+            width: 100%;
+            height: 2px;
+            background: rgba(0,255,65,0.1);
+            margin-bottom: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+        .loading-bar {
+            height: 100%;
+            background: var(--green);
+            box-shadow: 0 0 10px var(--green);
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+
+        .loading-status {
+            font-size: 12px;
+            color: rgba(0,255,65,0.5);
+            letter-spacing: 2px;
+            min-height: 20px;
+        }
+
+        /* ── MODE : 404 RÉEL ── */
+        #mode-404 { display: none; }
+
+        .err-code {
+            font-family: 'VT323', monospace;
+            font-size: clamp(80px, 20vw, 140px);
+            letter-spacing: 8px;
+            color: var(--red);
+            text-shadow: 4px 0 rgba(0,0,255,0.5), -4px 0 rgba(255,0,0,0.5), 0 0 40px rgba(255,42,42,0.3);
+            line-height: 1;
+            animation: errGlitch 4s infinite;
+        }
+        @keyframes errGlitch {
+            0%,85%,100% { transform: none; }
+            86% { transform: translate(-3px,0); clip-path: polygon(0 20%,100% 20%,100% 40%,0 40%); }
+            87% { transform: translate(3px,0); clip-path: polygon(0 60%,100% 60%,100% 80%,0 80%); }
+            88% { transform: none; clip-path: none; }
+        }
+
+        .err-title {
+            font-family: 'VT323', monospace;
+            font-size: clamp(22px, 5vw, 34px);
+            letter-spacing: 4px;
+            color: rgba(255,42,42,0.7);
+            margin-bottom: 16px;
+        }
+
+        .err-desc {
+            font-size: 12px;
+            color: rgba(0,255,65,0.4);
+            letter-spacing: 2px;
+            line-height: 1.9;
+            margin-bottom: 36px;
+        }
+        .err-desc span { color: var(--green); }
+
+        .err-path {
+            display: inline-block;
+            background: rgba(255,42,42,0.06);
+            border: 1px solid rgba(255,42,42,0.2);
+            padding: 8px 18px;
+            font-size: 13px;
+            color: rgba(255,42,42,0.5);
+            letter-spacing: 2px;
+            margin-bottom: 36px;
+            word-break: break-all;
+        }
+
+        .home-btn {
+            display: inline-block;
+            background: var(--green);
+            color: #000;
+            padding: 12px 32px;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 13px;
+            font-weight: bold;
+            letter-spacing: 3px;
+            text-decoration: none;
+            text-transform: uppercase;
+            transition: all 0.2s;
+        }
+        .home-btn:hover { background: #fff; box-shadow: 0 0 20px rgba(255,255,255,0.3); }
+
+        /* ── VERSION ── */
+        #version-display {
+            position: fixed; bottom: 20px; left: 20px;
+            font-size: 10px; letter-spacing: 2px;
+            color: rgba(0,255,65,0.25); z-index: 100;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+<div class="bg-grid"></div>
+
+<!-- MODE : CODE EN COURS DE RÉSOLUTION -->
+<div class="container" id="mode-loading">
+    <div class="loading-code" id="display-code">———</div>
+    <div class="loading-label">// RÉSOLUTION DU CODE EN COURS //</div>
+    <div class="loading-bar-wrap">
+        <div class="loading-bar" id="loading-bar"></div>
+    </div>
+    <div class="loading-status" id="loading-status">> INITIALISATION...</div>
+</div>
+
+<!-- MODE : 404 RÉEL (aucun code dans l'URL) -->
+<div class="container" id="mode-404">
+    <div class="err-code">404</div>
+    <div class="err-title">// SECTEUR INTROUVABLE //</div>
+    <div class="err-path" id="err-path-display">/???</div>
+    <div class="err-desc">
+        > LE SECTEUR DEMANDÉ N'EXISTE PAS<br>
+        > VÉRIFIER L'ADRESSE OU LE CODE<br>
+        > RETOURNER À L'<span>ACCUEIL</span> POUR CONTINUER
+    </div>
+    <a href="/" class="home-btn">⌂ RETOUR À L'ACCUEIL</a>
+</div>
+
+<div id="version-display">V. M13 | CLOUD</div>
+
+<script>
+    // ── EXTRAIRE LE CODE DEPUIS L'URL ──
+    // Ex: cloud.projectm13.xyz/WYATT  →  pathname = "/WYATT"
+    const pathname = window.location.pathname;
+    const segments = pathname.split('/').filter(Boolean); // ["WYATT"]
+    const code = segments[0] ? segments[0].toUpperCase().replace(/[^A-Z0-9]/g,'') : null;
+
+    const modeLoading = document.getElementById('mode-loading');
+    const mode404     = document.getElementById('mode-404');
+    const bar         = document.getElementById('loading-bar');
+    const statusEl    = document.getElementById('loading-status');
+
+    if (code && code.length >= 2) {
+        // ── Il y a un code dans l'URL → animer puis rediriger ──
+        modeLoading.style.display = 'block';
+        document.getElementById('display-code').textContent = code;
+
+        // Animation de chargement progressive
+        const steps = [
+            { pct: 15,  delay: 0,    msg: '> LECTURE DU CODE...' },
+            { pct: 40,  delay: 350,  msg: '> REQUÊTE VERS LES SERVEURS M13...' },
+            { pct: 70,  delay: 750,  msg: '> DÉCHIFFREMENT EN COURS...' },
+            { pct: 90,  delay: 1100, msg: '> CODE VALIDÉ — REDIRECTION...' },
+            { pct: 100, delay: 1400, msg: '> ACCÈS ACCORDÉ ✓' },
+        ];
+
+        steps.forEach(s => {
+            setTimeout(() => {
+                bar.style.width = s.pct + '%';
+                statusEl.textContent = s.msg;
+            }, s.delay);
+        });
+
+        setTimeout(() => {
+            // Sauvegarder le code pour que index.html le récupère
+            sessionStorage.setItem('m13_url_code', code);
+            window.location.replace('/');
+        }, 1800);
+
+    } else {
+        // ── Pas de code → vraie page 404 ──
+        mode404.style.display = 'block';
+        document.getElementById('err-path-display').textContent = pathname || '/';
+    }
+</script>
+</body>
+</html>
