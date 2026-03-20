@@ -309,10 +309,117 @@
         .cmd-desc { color: rgba(0,255,65,0.5); font-size: 11px; line-height: 1.5; }
         .help-footer { margin-top: 14px; padding-top: 12px; border-top: 1px solid rgba(0,255,65,0.12); font-size: 10px; color: rgba(0,255,65,0.35); letter-spacing: 1px; line-height: 1.9; }
 
+        /* ─── COOKIE BANNER ─── */
+        #cookie-banner {
+            display: none;
+            position: fixed; bottom: 0; left: 0; right: 0;
+            background: #030d03;
+            border-top: 1px solid rgba(0,255,65,0.3);
+            box-shadow: 0 -4px 30px rgba(0,255,65,0.08);
+            z-index: 9990;
+            padding: 16px 20px;
+            animation: slideUpBanner 0.4s ease;
+        }
+        #cookie-banner.show { display: block; }
+        @keyframes slideUpBanner { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+        .cookie-inner {
+            max-width: 860px; margin: 0 auto;
+            display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+        }
+        .cookie-icon { font-size: 22px; flex-shrink: 0; }
+        .cookie-text { flex: 1; font-size: 11px; color: rgba(0,255,65,0.6); letter-spacing: 1px; line-height: 1.7; min-width: 200px; }
+        .cookie-text strong { color: var(--green); }
+        .cookie-text a { color: var(--cyan); cursor: pointer; text-decoration: underline; }
+        .cookie-text a:hover { color: #fff; }
+        .cookie-actions { display: flex; gap: 8px; flex-shrink: 0; flex-wrap: wrap; }
+
+        .btn-cookie-accept { background: var(--green); color: #000; border: none; padding: 8px 20px; font-family: 'Share Tech Mono', monospace; font-size: 11px; font-weight: bold; letter-spacing: 2px; cursor: pointer; text-transform: uppercase; transition: all 0.2s; }
+        .btn-cookie-accept:hover { background: #fff; box-shadow: 0 0 12px rgba(255,255,255,0.2); }
+        .btn-cookie-essential { background: transparent; border: 1px solid rgba(0,255,65,0.35); color: rgba(0,255,65,0.6); padding: 8px 16px; font-family: 'Share Tech Mono', monospace; font-size: 11px; letter-spacing: 2px; cursor: pointer; text-transform: uppercase; transition: all 0.2s; }
+        .btn-cookie-essential:hover { border-color: var(--green); color: var(--green); }
+        .btn-cookie-refuse { background: transparent; border: 1px solid rgba(255,42,42,0.3); color: rgba(255,42,42,0.5); padding: 8px 14px; font-family: 'Share Tech Mono', monospace; font-size: 11px; letter-spacing: 2px; cursor: pointer; text-transform: uppercase; transition: all 0.2s; }
+        .btn-cookie-refuse:hover { border-color: var(--red); color: var(--red); }
+
+        /* ─── POLITIQUE COOKIES MODAL ─── */
+        #cookie-policy-modal {
+            display: none; position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.92);
+            z-index: 9993; align-items: center; justify-content: center;
+        }
+        #cookie-policy-modal.show { display: flex; }
+
+        .policy-box {
+            border: 1px solid rgba(0,255,65,0.4);
+            background: #030d03;
+            box-shadow: 0 0 40px rgba(0,255,65,0.12);
+            padding: 32px;
+            width: 100%; max-width: 600px;
+            max-height: 85vh;
+            overflow-y: auto;
+            position: relative;
+            animation: slideUp 0.25s ease;
+        }
+        .policy-box::-webkit-scrollbar { width: 4px; }
+        .policy-box::-webkit-scrollbar-track { background: #000; }
+        .policy-box::-webkit-scrollbar-thumb { background: rgba(0,255,65,0.3); }
+
+        .policy-title { font-family: 'VT323', monospace; font-size: 26px; letter-spacing: 3px; color: var(--green); margin-bottom: 20px; border-bottom: 1px solid rgba(0,255,65,0.2); padding-bottom: 12px; }
+        .policy-section { margin-bottom: 20px; }
+        .policy-section h3 { font-size: 11px; letter-spacing: 3px; color: var(--green); margin-bottom: 8px; text-transform: uppercase; }
+        .policy-section p, .policy-section li { font-size: 11px; color: rgba(0,255,65,0.5); line-height: 1.8; letter-spacing: 0.5px; }
+        .policy-section ul { padding-left: 16px; }
+        .policy-section li { margin-bottom: 4px; }
+        .policy-section li::marker { color: var(--green); }
+        .policy-tag { display: inline-block; font-size: 9px; letter-spacing: 1px; padding: 1px 6px; border: 1px solid currentColor; margin-right: 6px; margin-bottom: 4px; }
+        .tag-essential { color: var(--green); }
+        .tag-functional { color: var(--cyan); }
+        .tag-optional { color: var(--yellow); }
+
+        /* ─── COOKIE BANNER ─── */
+        #cookie-banner {
+            display: none; position: fixed; bottom: 0; left: 0; right: 0;
+            background: #030d03; border-top: 1px solid rgba(0,255,65,0.3);
+            box-shadow: 0 -4px 30px rgba(0,255,65,0.08); z-index: 9990;
+            padding: 16px 20px; animation: slideUpBanner 0.4s ease;
+        }
+        #cookie-banner.show { display: block; }
+        @keyframes slideUpBanner { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        .cookie-inner { max-width: 860px; margin: 0 auto; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+        .cookie-icon { font-size: 22px; flex-shrink: 0; }
+        .cookie-text { flex: 1; font-size: 11px; color: rgba(0,255,65,0.55); letter-spacing: 1px; line-height: 1.8; min-width: 200px; }
+        .cookie-text strong { color: var(--green); }
+        .cookie-text a { color: var(--cyan); cursor: pointer; text-decoration: underline; }
+        .cookie-text a:hover { color: #fff; }
+        .cookie-actions { display: flex; gap: 8px; flex-shrink: 0; flex-wrap: wrap; }
+        .btn-cookie-accept { background: var(--green); color: #000; border: none; padding: 8px 20px; font-family: 'Share Tech Mono', monospace; font-size: 11px; font-weight: bold; letter-spacing: 2px; cursor: pointer; text-transform: uppercase; transition: all 0.2s; }
+        .btn-cookie-accept:hover { background: #fff; box-shadow: 0 0 12px rgba(255,255,255,0.2); }
+        .btn-cookie-essential { background: transparent; border: 1px solid rgba(0,255,65,0.35); color: rgba(0,255,65,0.6); padding: 8px 14px; font-family: 'Share Tech Mono', monospace; font-size: 11px; letter-spacing: 2px; cursor: pointer; text-transform: uppercase; transition: all 0.2s; }
+        .btn-cookie-essential:hover { border-color: var(--green); color: var(--green); }
+        .btn-cookie-refuse { background: transparent; border: 1px solid rgba(255,42,42,0.3); color: rgba(255,42,42,0.5); padding: 8px 12px; font-family: 'Share Tech Mono', monospace; font-size: 11px; letter-spacing: 2px; cursor: pointer; text-transform: uppercase; transition: all 0.2s; }
+        .btn-cookie-refuse:hover { border-color: var(--red); color: var(--red); }
+
+        /* ─── POLITIQUE COOKIES MODAL ─── */
+        #cookie-policy-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); z-index: 9993; align-items: center; justify-content: center; }
+        #cookie-policy-modal.show { display: flex; }
+        .policy-box { border: 1px solid rgba(0,255,65,0.4); background: #030d03; box-shadow: 0 0 40px rgba(0,255,65,0.12); padding: 32px; width: 100%; max-width: 600px; max-height: 85vh; overflow-y: auto; position: relative; animation: slideUp 0.25s ease; }
+        .policy-box::-webkit-scrollbar { width: 4px; } .policy-box::-webkit-scrollbar-track { background: #000; } .policy-box::-webkit-scrollbar-thumb { background: rgba(0,255,65,0.3); }
+        .policy-title { font-family: 'VT323', monospace; font-size: 26px; letter-spacing: 3px; color: var(--green); margin-bottom: 20px; border-bottom: 1px solid rgba(0,255,65,0.2); padding-bottom: 12px; }
+        .policy-section { margin-bottom: 20px; }
+        .policy-section h3 { font-size: 11px; letter-spacing: 3px; color: var(--green); margin-bottom: 8px; text-transform: uppercase; }
+        .policy-section p, .policy-section li { font-size: 11px; color: rgba(0,255,65,0.5); line-height: 1.8; letter-spacing: 0.5px; }
+        .policy-section ul { padding-left: 16px; }
+        .policy-section li { margin-bottom: 4px; }
+        .policy-section li::marker { color: var(--green); }
+        .policy-tag { display: inline-block; font-size: 9px; letter-spacing: 1px; padding: 1px 6px; border: 1px solid currentColor; margin-left: 6px; }
+        .tag-essential { color: var(--green); } .tag-functional { color: var(--cyan); }
+
         @media (max-width: 500px) {
             .wrapper { padding: 24px 14px 80px; }
             .panel { padding: 24px 18px; }
             #file-list, #code-file-list, #codes-list { grid-template-columns: 1fr; }
+            .cookie-inner { flex-direction: column; align-items: flex-start; }
         }
     </style>
 </head>
@@ -546,6 +653,82 @@
     <div class="help-footer">
         🔒 CONNECTÉ → Supabase (multi-appareils)<br>
         📦 NON CONNECTÉ → localStorage (~5Mo)
+    </div>
+</div>
+
+<!-- ══════ BANNIÈRE COOKIES ══════ -->
+<div id="cookie-banner">
+    <div class="cookie-inner">
+        <div class="cookie-icon">🍪</div>
+        <div class="cookie-text">
+            <strong>CLOUD M13 — COOKIES &amp; DONNÉES</strong><br>
+            Ce site utilise des cookies <strong>essentiels</strong> pour l'authentification (Supabase) et le stockage local.
+            Des cookies <strong>fonctionnels</strong> améliorent votre expérience.
+            <a onclick="openCookiePolicy()">Politique complète</a>
+        </div>
+        <div class="cookie-actions">
+            <button class="btn-cookie-accept" onclick="setCookieConsent('all')">✓ TOUT ACCEPTER</button>
+            <button class="btn-cookie-essential" onclick="setCookieConsent('essential')">ESSENTIEL SEULEMENT</button>
+            <button class="btn-cookie-refuse" onclick="setCookieConsent('none')">REFUSER</button>
+        </div>
+    </div>
+</div>
+
+<!-- ══════ POLITIQUE COOKIES ══════ -->
+<div id="cookie-policy-modal" onclick="if(event.target===this)closeCookiePolicy()">
+    <div class="policy-box">
+        <button class="modal-close" onclick="closeCookiePolicy()">✕</button>
+        <div class="policy-title">// POLITIQUE DES COOKIES //</div>
+        <div class="policy-section">
+            <h3>► QU'EST-CE QU'UN COOKIE ?</h3>
+            <p>Un cookie est un petit fichier texte stocké dans votre navigateur. Cloud M13 utilise uniquement des cookies nécessaires à son fonctionnement — aucun tracking publicitaire, aucune revente de données.</p>
+        </div>
+        <div class="policy-section">
+            <h3>► COOKIES ESSENTIELS <span class="policy-tag tag-essential">OBLIGATOIRES</span></h3>
+            <p>Indispensables au fonctionnement du service. Ne peuvent pas être désactivés.</p>
+            <ul>
+                <li><strong>sb-session</strong> — Jeton d'authentification Supabase. Durée : session + 7 jours.</li>
+                <li><strong>sb-refresh-token</strong> — Renouvellement automatique de session. Durée : 30 jours.</li>
+                <li><strong>m13_cookie_consent</strong> — Mémorise votre choix cookies. Durée : 1 an.</li>
+            </ul>
+        </div>
+        <div class="policy-section">
+            <h3>► COOKIES FONCTIONNELS <span class="policy-tag tag-functional">OPTIONNELS</span></h3>
+            <ul>
+                <li><strong>m13_local_files</strong> — Stockage localStorage de vos fichiers locaux (hors connexion). Aucune expiration.</li>
+                <li><strong>m13_url_code</strong> — Code URL temporaire pour la navigation. Durée : session uniquement.</li>
+            </ul>
+        </div>
+        <div class="policy-section">
+            <h3>► DONNÉES PERSONNELLES</h3>
+            <ul>
+                <li>Votre <strong>email</strong> est utilisé uniquement pour l'authentification Supabase.</li>
+                <li>Vos <strong>fichiers</strong> sont stockés dans votre espace personnel avec accès restreint (RLS).</li>
+                <li>Aucune donnée n'est vendue ou partagée à des tiers à des fins commerciales.</li>
+                <li>Vous pouvez supprimer votre compte et toutes vos données à tout moment.</li>
+            </ul>
+        </div>
+        <div class="policy-section">
+            <h3>► SERVICES TIERS</h3>
+            <ul>
+                <li><strong>Supabase</strong> — BDD &amp; auth. <a href="https://supabase.com/privacy" target="_blank" style="color:var(--cyan)">Politique →</a></li>
+                <li><strong>GitHub Pages</strong> — Hébergement. <a href="https://docs.github.com/fr/site-policy/privacy-policies/github-privacy-statement" target="_blank" style="color:var(--cyan)">Politique →</a></li>
+                <li><strong>Gravatar / DiceBear</strong> — Avatar via hash MD5 de l'email (email non transmis en clair).</li>
+            </ul>
+        </div>
+        <div class="policy-section">
+            <h3>► VOS DROITS (RGPD)</h3>
+            <p>Droit d'accès, rectification et suppression de vos données. Contactez l'administrateur ou supprimez votre compte directement depuis l'interface.</p>
+        </div>
+        <div class="policy-section">
+            <h3>► MISE À JOUR</h3>
+            <p style="color:rgba(0,255,65,0.3)">Mars 2025 — Cloud M13 par M13</p>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:20px;flex-wrap:wrap;">
+            <button class="btn-cookie-accept" onclick="setCookieConsent('all');closeCookiePolicy()">✓ TOUT ACCEPTER</button>
+            <button class="btn-cookie-essential" onclick="setCookieConsent('essential');closeCookiePolicy()">ESSENTIEL SEULEMENT</button>
+            <button class="btn-cookie-refuse" onclick="setCookieConsent('none');closeCookiePolicy()">REFUSER</button>
+        </div>
     </div>
 </div>
 
@@ -1117,6 +1300,49 @@
         });
     }
 
+    // ══════════════════════════════════════
+    //  COOKIES — CONSENTEMENT
+    // ══════════════════════════════════════
+
+    function initCookieBanner() {
+        const consent = localStorage.getItem('m13_cookie_consent');
+        if (!consent) {
+            // Afficher après 800ms pour ne pas bloquer le chargement
+            setTimeout(() => document.getElementById('cookie-banner').classList.add('show'), 800);
+        }
+        // Appliquer les préférences
+        if (consent === 'none') {
+            // Refus : vider le localStorage fonctionnel (pas l'essentiel)
+            // On ne supprime pas l'auth Supabase (essentiel)
+        }
+    }
+
+    function setCookieConsent(level) {
+        // Stocker le choix 1 an
+        const expires = new Date();
+        expires.setFullYear(expires.getFullYear() + 1);
+        localStorage.setItem('m13_cookie_consent', level);
+        localStorage.setItem('m13_cookie_date', new Date().toISOString());
+
+        // Si refus total : vider les fichiers locaux fonctionnels
+        if (level === 'none') {
+            localStorage.removeItem('m13_local_files');
+        }
+
+        // Masquer la bannière avec animation
+        const banner = document.getElementById('cookie-banner');
+        banner.style.transform = 'translateY(100%)';
+        banner.style.transition = 'transform 0.35s ease';
+        setTimeout(() => { banner.classList.remove('show'); banner.style.transform = ''; }, 350);
+    }
+
+    function openCookiePolicy() {
+        document.getElementById('cookie-policy-modal').classList.add('show');
+    }
+    function closeCookiePolicy() {
+        document.getElementById('cookie-policy-modal').classList.remove('show');
+    }
+
     // ── MISC ──
     function toggleHelp() { const m=document.getElementById('help-modal'); m.style.display=m.style.display==='block'?'none':'block'; }
 
@@ -1127,6 +1353,7 @@
     }
 
     updateVersion();
+    initCookieBanner();
     sb.auth.getSession().then(({data}) => {
         currentUser = data?.session?.user || null;
         updateAuthUI();
